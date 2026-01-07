@@ -48,13 +48,13 @@ function renderQuestions() {
     div.className = "question";
 
     div.innerHTML = `
-      <p><b>${i + 1}. ${q.question}</b></p>
+      <p><b>${i + 1}. ${q.text}</b></p>
       <div class="options">
         ${q.options
           .map(
-            (opt, idx) => `
+            (opt) => `
             <label class="option">
-              <input type="radio" name="q${i}" value="${idx}">
+              <input type="radio" name="q${i}" value="${opt}">
               ${opt}
             </label>
           `
@@ -69,7 +69,7 @@ function renderQuestions() {
   document.querySelectorAll("input[type=radio]").forEach((el) => {
     el.addEventListener("change", (e) => {
       const qIndex = parseInt(e.target.name.replace("q", ""));
-      answers[qIndex] = parseInt(e.target.value);
+      answers[qIndex] = e.target.value;
     });
   });
 }
@@ -107,7 +107,7 @@ function submitExam(isAuto = false, reason = "") {
 
   let score = 0;
   questions.forEach((q, i) => {
-    if (answers[i] === q.answer) score++;
+    if (answers[i] === q.correct) score++;
   });
 
   examPage.style.display = "none";
@@ -125,7 +125,6 @@ function submitExam(isAuto = false, reason = "") {
       NIM: <b>${studentNim.value}</b><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
-
     renderReview();
   }
 
@@ -141,15 +140,15 @@ function renderReview() {
 
   questions.forEach((q, i) => {
     const userAnswer = answers[i];
-    const correct = userAnswer === q.answer;
+    const correct = userAnswer === q.correct;
 
     const div = document.createElement("div");
     div.className = "question";
 
     div.innerHTML = `
-      <p><b>${i + 1}. ${q.question}</b></p>
-      <p>Jawaban Anda: <b>${userAnswer !== undefined ? q.options[userAnswer] : "-"}</b></p>
-      <p>Jawaban Benar: <b>${q.options[q.answer]}</b></p>
+      <p><b>${i + 1}. ${q.text}</b></p>
+      <p>Jawaban Anda: <b>${userAnswer || "-"}</b></p>
+      <p>Jawaban Benar: <b>${q.correct}</b></p>
       <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
         ${correct ? "✔ Benar" : "✘ Salah"}
       </p>
@@ -203,7 +202,7 @@ function setupAntiCheat() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "F12" || (e.ctrlKey && e.shiftKey)) {
       e.preventDefault();
-      autoSubmit("Membuka developer tools");
+      autoSubmit("Developer tools");
     }
   });
 }
@@ -235,7 +234,5 @@ document.getElementById("start-btn").addEventListener("click", async () => {
  * SUBMIT BUTTON
  **********************/
 document.getElementById("submit-btn").addEventListener("click", () => {
-  if (confirm("Kirim jawaban sekarang?")) {
-    submitExam(false);
-  }
+  if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 });
