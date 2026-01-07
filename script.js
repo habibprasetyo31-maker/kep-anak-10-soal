@@ -26,30 +26,31 @@ const studentNim = document.getElementById("student-nim");
 const studentClass = document.getElementById("student-class");
 
 const questionsEl = document.getElementById("questions");
+const timerEl = document.getElementById("timer");
 const resultText = document.getElementById("result-text");
 const reviewContainer = document.getElementById("review-container");
-const timerEl = document.getElementById("timer");
+
+const navNumbers = document.getElementById("question-numbers");
 
 /**********************
- * LOAD & RANDOM QUESTIONS
+ * UTIL
+ **********************/
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+/**********************
+ * LOAD QUESTIONS
  **********************/
 async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
-  let data = await res.json();
+  questions = await res.json();
 
-  // Acak urutan soal
-  data = data.sort(() => Math.random() - 0.5);
-
-  // Acak opsi jawaban TANPA mengubah jawaban benar
-  questions = data.map(q => {
-    const options = [...q.options];
-    options.sort(() => Math.random() - 0.5);
-
-    return {
-      ...q,
-      options
-    };
-  });
+  // random soal + random opsi
+  questions = shuffle(questions).map((q) => ({
+    ...q,
+    options: shuffle([...q.options]),
+  }));
 }
 
 /**********************
@@ -61,18 +62,20 @@ function renderQuestions() {
   questions.forEach((q, i) => {
     const div = document.createElement("div");
     div.className = "question";
-    div.id = `question-${i}`;
+    div.dataset.index = i;
 
     div.innerHTML = `
       <p><b>${i + 1}. ${q.text}</b></p>
       <div class="options">
         ${q.options
-          .map(opt => `
+          .map(
+            (opt) => `
             <label class="option">
               <input type="radio" name="q${i}" value="${opt}">
               ${opt}
             </label>
-          `)
+          `
+          )
           .join("")}
       </div>
     `;
@@ -80,12 +83,27 @@ function renderQuestions() {
     questionsEl.appendChild(div);
   });
 
-  document.querySelectorAll("input[type=radio]").forEach(el => {
-    el.addEventListener("change", e => {
-      const qIndex = parseInt(e.target.name.replace("q", ""));
-      answers[qIndex] = e.target.value;
-      currentQuestionIndex = qIndex;
-      updateQuestionNumbers();
+  attachAnswerEvents();
+  showQuestion();
+}
+
+/**********************
+ * ANSWER HANDLER
+ **********************/
+function attachAnswerEvents() {
+  document.querySelectorAll("input[type=radio]").forEach((input) => {
+    input.addEventListener("change", (e) => {
+      const index = parseInt(e.target.name.replace("q", ""));
+      answers[index] = e.target.value;
+
+      // highlight option
+      document
+        .querySelectorAll(`input[name="q${index}"]`)
+        .forEach((el) => el.closest(".option").classList.remove("selected"));
+      e.target.closest(".option").classList.add("selected");
+
+      // 🔥 update indikator
+      updateNavStatus(index);
     });
   });
 }
@@ -94,41 +112,44 @@ function renderQuestions() {
  * NAVIGATION NUMBERS
  **********************/
 function renderQuestionNumbers() {
-  const nav = document.getElementById("question-numbers");
-  nav.innerHTML = "";
+  navNumbers.innerHTML = "";
 
   questions.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = i + 1;
-    btn.className = "nav-number";
-    btn.dataset.index = i;
+    const div = document.createElement("div");
+    div.className = "circle";
+    div.textContent = i + 1;
 
-    btn.addEventListener("click", () => {
+    div.addEventListener("click", () => {
       currentQuestionIndex = i;
-      scrollToQuestion(i);
-      updateQuestionNumbers();
+      showQuestion();
     });
 
-    nav.appendChild(btn);
-  });
-
-  updateQuestionNumbers();
-}
-
-function updateQuestionNumbers() {
-  document.querySelectorAll(".nav-number").forEach((btn, i) => {
-    btn.classList.remove("active", "answered");
-
-    if (answers[i] !== undefined) btn.classList.add("answered");
-    if (i === currentQuestionIndex) btn.classList.add("active");
+    navNumbers.appendChild(div);
   });
 }
 
-function scrollToQuestion(index) {
-  const el = document.getElementById(`question-${index}`);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+function updateNavStatus(index) {
+  const circles = document.querySelectorAll(".nav-circle .circle");
+  if (circles[index]) {
+    circles[index].classList.add("answered");
   }
+}
+
+function updateActiveNav() {
+  document.querySelectorAll(".nav-circle .circle").forEach((el, i) => {
+    el.classList.toggle("current", i === currentQuestionIndex);
+  });
+}
+
+/**********************
+ * SHOW SINGLE QUESTION
+ **********************/
+function showQuestion() {
+  document.querySelectorAll(".question").forEach((q, i) => {
+    q.style.display = i === currentQuestionIndex ? "block" : "none";
+  });
+
+  updateActiveNav();
 }
 
 /**********************
@@ -152,7 +173,7 @@ function updateTimer() {
 }
 
 /**********************
- * SUBMIT & SCORE
+ * SUBMIT
  **********************/
 function submitExam(isAuto = false, reason = "") {
   if (submitted) return;
@@ -168,11 +189,10 @@ function submitExam(isAuto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  resultText.innerHTML = isAuto
-    ? `<b>UJIAN DIHENTIKAN OTOMATIS</b><br>Alasan: ${reason}<br><br>Skor: <b>${score}/${questions.length}</b>`
-    : `Nama: <b>${studentName.value}</b><br>
-       NIM: <b>${studentNim.value}</b><br>
-       Skor: <b>${score}/${questions.length}</b>`;
+  resultText.innerHTML = `
+    Skor: <b>${score}/${questions.length}</b><br>
+    ${isAuto ? `<br><b>UJIAN DIHENTIKAN</b><br>${reason}` : ""}
+  `;
 
   renderReview();
   sendResult(score, reason);
@@ -187,16 +207,17 @@ function renderReview() {
   questions.forEach((q, i) => {
     const correct = answers[i] === q.correct;
 
-    reviewContainer.innerHTML += `
-      <div class="question">
-        <p><b>${i + 1}. ${q.text}</b></p>
-        <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
-        <p>Jawaban Benar: <b>${q.correct}</b></p>
-        <p style="color:${correct ? "#4caf50" : "#f44336"}">
-          ${correct ? "✔ Benar" : "✘ Salah"}
-        </p>
-      </div>
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `
+      <p><b>${i + 1}. ${q.text}</b></p>
+      <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
+      <p>Jawaban Benar: <b>${q.correct}</b></p>
+      <p style="color:${correct ? "#4caf50" : "#f44336"}">
+        ${correct ? "✔ Benar" : "✘ Salah"}
+      </p>
     `;
+    reviewContainer.appendChild(div);
   });
 }
 
@@ -215,7 +236,7 @@ function sendResult(score, reason) {
       class: studentClass.value,
       score,
       reason,
-      timestamp: new Date().toISOString()
+      time: new Date().toISOString(),
     }),
   });
 }
@@ -224,7 +245,7 @@ function sendResult(score, reason) {
  * ANTI CHEAT
  **********************/
 function autoSubmit(reason) {
-  alert("Pelanggaran terdeteksi: " + reason);
+  alert("Ujian dihentikan: " + reason);
   submitExam(true, reason);
 }
 
@@ -233,26 +254,15 @@ function setupAntiCheat() {
     if (document.hidden) autoSubmit("Berpindah tab");
   });
 
-  document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement) autoSubmit("Keluar fullscreen");
-  });
-
-  document.addEventListener("contextmenu", e => e.preventDefault());
-
-  document.addEventListener("keydown", e => {
-    if (e.key === "F12" || (e.ctrlKey && e.shiftKey)) {
-      e.preventDefault();
-      autoSubmit("Developer tools");
-    }
-  });
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
 }
 
 /**********************
- * START EXAM
+ * BUTTON EVENTS
  **********************/
 document.getElementById("start-btn").addEventListener("click", async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
-    alert("Lengkapi data");
+    alert("Lengkapi data peserta");
     return;
   }
 
@@ -266,12 +276,25 @@ document.getElementById("start-btn").addEventListener("click", async () => {
   setupAntiCheat();
   startTimer();
 
-  document.documentElement.requestFullscreen?.();
+  document.getElementById("info-student").innerHTML = `
+    ${studentName.value}<br>${studentNim.value}<br>${studentClass.value}
+  `;
 });
 
-/**********************
- * SUBMIT BUTTON
- **********************/
+document.getElementById("next-btn").addEventListener("click", () => {
+  if (currentQuestionIndex < questions.length - 1) {
+    currentQuestionIndex++;
+    showQuestion();
+  }
+});
+
+document.getElementById("prev-btn").addEventListener("click", () => {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    showQuestion();
+  }
+});
+
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 });
