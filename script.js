@@ -22,17 +22,21 @@ const resultPage = document.getElementById("result-page");
 
 const studentName = document.getElementById("student-name");
 const studentNim = document.getElementById("student-nim");
-const studentClass = document.getElementById("student-class");
+const studentClass = document.getElementById("studentڍclass");
 
 const questionsEl = document.getElementById("questions");
 const resultText = document.getElementById("result-text");
 const timerEl = document.getElementById("timer");
+const reviewContainer = document.getElementById("review-container");
 
 /**********************
- * SAFE QUESTION TEXT
+ * UTIL
  **********************/
-function getQuestionText(q) {
-  return q.text || q.question || q.soal || "Soal tidak tersedia";
+function shuffle(array) {
+  return array
+    .map(v => ({ v, r: Math.random() }))
+    .sort((a, b) => a.r - b.r)
+    .map(({ v }) => v);
 }
 
 /**********************
@@ -40,8 +44,20 @@ function getQuestionText(q) {
  **********************/
 async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
-  questions = await res.json();
-  questions = questions.sort(() => Math.random() - 0.5);
+  let data = await res.json();
+
+  // Random soal
+  data = shuffle(data);
+
+  // Random opsi jawaban TANPA merusak jawaban benar
+  questions = data.map(q => {
+    const shuffledOptions = shuffle([...q.options]);
+    return {
+      text: q.text,
+      options: shuffledOptions,
+      correct: q.correct
+    };
+  });
 }
 
 /**********************
@@ -55,26 +71,22 @@ function renderQuestions() {
     div.className = "question";
 
     div.innerHTML = `
-      <p><b>${i + 1}. ${getQuestionText(q)}</b></p>
+      <p><b>${i + 1}. ${q.text}</b></p>
       <div class="options">
-        ${q.options
-          .map(
-            (opt) => `
-            <label class="option">
-              <input type="radio" name="q${i}" value="${opt}">
-              ${opt}
-            </label>
-          `
-          )
-          .join("")}
+        ${q.options.map(opt => `
+          <label class="option">
+            <input type="radio" name="q${i}" value="${opt}">
+            ${opt}
+          </label>
+        `).join("")}
       </div>
     `;
 
     questionsEl.appendChild(div);
   });
 
-  document.querySelectorAll("input[type=radio]").forEach((el) => {
-    el.addEventListener("change", (e) => {
+  document.querySelectorAll("input[type=radio]").forEach(el => {
+    el.addEventListener("change", e => {
       const qIndex = parseInt(e.target.name.replace("q", ""));
       answers[qIndex] = e.target.value;
     });
@@ -132,17 +144,16 @@ function submitExam(isAuto = false, reason = "") {
  * REVIEW
  **********************/
 function renderReview() {
-  const container = document.createElement("div");
-  container.style.marginTop = "20px";
+  reviewContainer.innerHTML = "<h3>Review Jawaban</h3>";
 
   questions.forEach((q, i) => {
     const userAnswer = answers[i];
     const correct = userAnswer === q.correct;
 
-    container.innerHTML += `
+    reviewContainer.innerHTML += `
       <div class="question">
-        <p><b>${i + 1}. ${getQuestionText(q)}</b></p>
-        <p>Jawaban Anda: <b>${userAnswer ?? "-"}</b></p>
+        <p><b>${i + 1}. ${q.text}</b></p>
+        <p>Jawaban Anda: <b>${userAnswer || "-"}</b></p>
         <p>Jawaban Benar: <b>${q.correct}</b></p>
         <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
           ${correct ? "✔ Benar" : "✘ Salah"}
@@ -150,8 +161,6 @@ function renderReview() {
       </div>
     `;
   });
-
-  resultPage.querySelector(".card").appendChild(container);
 }
 
 /**********************
@@ -159,7 +168,6 @@ function renderReview() {
  **********************/
 function sendResult(score, reason) {
   if (!GOOGLE_SCRIPT_URL) return;
-
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -191,9 +199,9 @@ function setupAntiCheat() {
     if (!document.fullscreenElement) autoSubmit("Keluar fullscreen");
   });
 
-  document.addEventListener("contextmenu", (e) => e.preventDefault());
+  document.addEventListener("contextmenu", e => e.preventDefault());
 
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key === "F12" || (e.ctrlKey && e.shiftKey)) {
       e.preventDefault();
       autoSubmit("Developer tools");
@@ -202,7 +210,7 @@ function setupAntiCheat() {
 }
 
 /**********************
- * START
+ * START EXAM
  **********************/
 document.getElementById("start-btn").addEventListener("click", async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
@@ -219,9 +227,14 @@ document.getElementById("start-btn").addEventListener("click", async () => {
   setupAntiCheat();
   startTimer();
 
-  document.documentElement.requestFullscreen?.();
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
 });
 
+/**********************
+ * SUBMIT BUTTON
+ **********************/
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 });
