@@ -12,6 +12,7 @@ let answers = {};
 let timerInterval = null;
 let timeLeft = 0;
 let submitted = false;
+let currentQuestionIndex = 0;
 
 /**********************
  * ELEMENTS
@@ -22,40 +23,31 @@ const resultPage = document.getElementById("result-page");
 
 const studentName = document.getElementById("student-name");
 const studentNim = document.getElementById("student-nim");
-const studentClass = document.getElementById("studentڍclass");
+const studentClass = document.getElementById("student-class");
 
 const questionsEl = document.getElementById("questions");
 const resultText = document.getElementById("result-text");
-const timerEl = document.getElementById("timer");
 const reviewContainer = document.getElementById("review-container");
+const timerEl = document.getElementById("timer");
 
 /**********************
- * UTIL
- **********************/
-function shuffle(array) {
-  return array
-    .map(v => ({ v, r: Math.random() }))
-    .sort((a, b) => a.r - b.r)
-    .map(({ v }) => v);
-}
-
-/**********************
- * LOAD QUESTIONS
+ * LOAD & RANDOM QUESTIONS
  **********************/
 async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // Random soal
-  data = shuffle(data);
+  // Acak urutan soal
+  data = data.sort(() => Math.random() - 0.5);
 
-  // Random opsi jawaban TANPA merusak jawaban benar
+  // Acak opsi jawaban TANPA mengubah jawaban benar
   questions = data.map(q => {
-    const shuffledOptions = shuffle([...q.options]);
+    const options = [...q.options];
+    options.sort(() => Math.random() - 0.5);
+
     return {
-      text: q.text,
-      options: shuffledOptions,
-      correct: q.correct
+      ...q,
+      options
     };
   });
 }
@@ -69,16 +61,19 @@ function renderQuestions() {
   questions.forEach((q, i) => {
     const div = document.createElement("div");
     div.className = "question";
+    div.id = `question-${i}`;
 
     div.innerHTML = `
       <p><b>${i + 1}. ${q.text}</b></p>
       <div class="options">
-        ${q.options.map(opt => `
-          <label class="option">
-            <input type="radio" name="q${i}" value="${opt}">
-            ${opt}
-          </label>
-        `).join("")}
+        ${q.options
+          .map(opt => `
+            <label class="option">
+              <input type="radio" name="q${i}" value="${opt}">
+              ${opt}
+            </label>
+          `)
+          .join("")}
       </div>
     `;
 
@@ -89,8 +84,51 @@ function renderQuestions() {
     el.addEventListener("change", e => {
       const qIndex = parseInt(e.target.name.replace("q", ""));
       answers[qIndex] = e.target.value;
+      currentQuestionIndex = qIndex;
+      updateQuestionNumbers();
     });
   });
+}
+
+/**********************
+ * NAVIGATION NUMBERS
+ **********************/
+function renderQuestionNumbers() {
+  const nav = document.getElementById("question-numbers");
+  nav.innerHTML = "";
+
+  questions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = i + 1;
+    btn.className = "nav-number";
+    btn.dataset.index = i;
+
+    btn.addEventListener("click", () => {
+      currentQuestionIndex = i;
+      scrollToQuestion(i);
+      updateQuestionNumbers();
+    });
+
+    nav.appendChild(btn);
+  });
+
+  updateQuestionNumbers();
+}
+
+function updateQuestionNumbers() {
+  document.querySelectorAll(".nav-number").forEach((btn, i) => {
+    btn.classList.remove("active", "answered");
+
+    if (answers[i] !== undefined) btn.classList.add("answered");
+    if (i === currentQuestionIndex) btn.classList.add("active");
+  });
+}
+
+function scrollToQuestion(index) {
+  const el = document.getElementById(`question-${index}`);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 /**********************
@@ -114,11 +152,12 @@ function updateTimer() {
 }
 
 /**********************
- * SUBMIT
+ * SUBMIT & SCORE
  **********************/
 function submitExam(isAuto = false, reason = "") {
   if (submitted) return;
   submitted = true;
+
   clearInterval(timerInterval);
 
   let score = 0;
@@ -130,13 +169,12 @@ function submitExam(isAuto = false, reason = "") {
   resultPage.style.display = "flex";
 
   resultText.innerHTML = isAuto
-    ? `<b>UJIAN DIHENTIKAN OTOMATIS</b><br>Alasan: ${reason}<br><br>
-       Skor: <b>${score}/${questions.length}</b>`
+    ? `<b>UJIAN DIHENTIKAN OTOMATIS</b><br>Alasan: ${reason}<br><br>Skor: <b>${score}/${questions.length}</b>`
     : `Nama: <b>${studentName.value}</b><br>
        NIM: <b>${studentNim.value}</b><br>
        Skor: <b>${score}/${questions.length}</b>`;
 
-  if (!isAuto) renderReview();
+  renderReview();
   sendResult(score, reason);
 }
 
@@ -144,18 +182,17 @@ function submitExam(isAuto = false, reason = "") {
  * REVIEW
  **********************/
 function renderReview() {
-  reviewContainer.innerHTML = "<h3>Review Jawaban</h3>";
+  reviewContainer.innerHTML = "";
 
   questions.forEach((q, i) => {
-    const userAnswer = answers[i];
-    const correct = userAnswer === q.correct;
+    const correct = answers[i] === q.correct;
 
     reviewContainer.innerHTML += `
       <div class="question">
         <p><b>${i + 1}. ${q.text}</b></p>
-        <p>Jawaban Anda: <b>${userAnswer || "-"}</b></p>
+        <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
         <p>Jawaban Benar: <b>${q.correct}</b></p>
-        <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
+        <p style="color:${correct ? "#4caf50" : "#f44336"}">
           ${correct ? "✔ Benar" : "✘ Salah"}
         </p>
       </div>
@@ -168,6 +205,7 @@ function renderReview() {
  **********************/
 function sendResult(score, reason) {
   if (!GOOGLE_SCRIPT_URL) return;
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -177,7 +215,7 @@ function sendResult(score, reason) {
       class: studentClass.value,
       score,
       reason,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     }),
   });
 }
@@ -220,6 +258,7 @@ document.getElementById("start-btn").addEventListener("click", async () => {
 
   await loadQuestions();
   renderQuestions();
+  renderQuestionNumbers();
 
   loginPage.style.display = "none";
   examPage.style.display = "block";
@@ -227,9 +266,7 @@ document.getElementById("start-btn").addEventListener("click", async () => {
   setupAntiCheat();
   startTimer();
 
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen();
-  }
+  document.documentElement.requestFullscreen?.();
 });
 
 /**********************
