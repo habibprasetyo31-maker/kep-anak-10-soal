@@ -1,167 +1,108 @@
-/***********************
+/**********************
  * CONFIG
- ***********************/
-const EXAM_DURATION_MIN = 30; // menit
-const GOOGLE_SCRIPT_URL = window.GOOGLE_SCRIPT_URL;
+ **********************/
+const GOOGLE_SCRIPT_URL = window.GOOGLE_SCRIPT_URL || "";
+const TIME_PER_QUESTION = 60;
 
-/***********************
+/**********************
  * STATE
- ***********************/
-let questions = [
-  {
-    q: "Contoh soal 1?",
-    options: ["A", "B", "C", "D"],
-    answer: 1
-  },
-  {
-    q: "Contoh soal 2?",
-    options: ["A", "B", "C", "D"],
-    answer: 2
-  }
-];
-
-let currentIndex = 0;
+ **********************/
+let questions = [];
 let answers = {};
-let timerInterval;
-let startTime;
+let currentIndex = 0;
+let timerInterval = null;
+let timeLeft = 0;
+let submitted = false;
 let autoSubmitted = false;
 
-/***********************
+/**********************
  * ELEMENTS
- ***********************/
+ **********************/
 const loginPage = document.getElementById("login-page");
 const examPage = document.getElementById("exam-page");
 const resultPage = document.getElementById("result-page");
 
-const startBtn = document.getElementById("start-btn");
-const submitBtn = document.getElementById("submit-btn");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
+const studentName = document.getElementById("student-name");
+const studentNim = document.getElementById("student-nim");
+const studentClass = document.getElementById("student-class");
 
-const questionBox = document.getElementById("questions");
-const navBox = document.getElementById("question-numbers");
-const timerEl = document.getElementById("timer");
+const questionsEl = document.getElementById("questions");
 const resultText = document.getElementById("result-text");
-const infoStudent = document.getElementById("info-student");
+const reviewContainer = document.getElementById("review-container");
+const timerEl = document.getElementById("timer");
 
-/***********************
- * START EXAM
- ***********************/
-startBtn.addEventListener("click", () => {
-  const name = studentName.value.trim();
-  const nim = studentNim.value.trim();
-  const cls = studentClass.value.trim();
-
-  if (!name || !nim || !cls) {
-    alert("Lengkapi data terlebih dahulu");
-    return;
-  }
-
-  infoStudent.innerText = `${name} | ${nim} | ${cls}`;
-
-  loginPage.style.display = "none";
-  examPage.style.display = "block";
-
-  enableSecurity();
-  startTimer();
-  renderNav();
-  renderQuestion();
-});
-
-/***********************
- * RENDER QUESTION
- ***********************/
-function renderQuestion() {
-  const q = questions[currentIndex];
-  questionBox.innerHTML = `
-    <div class="question">
-      <p><b>${currentIndex + 1}. ${q.q}</b></p>
-      <div class="options">
-        ${q.options.map((opt, i) => `
-          <label class="option ${answers[currentIndex] === i ? "selected" : ""}">
-            <input type="radio" name="q${currentIndex}" ${answers[currentIndex] === i ? "checked" : ""}/>
-            ${opt}
-          </label>
-        `).join("")}
-      </div>
-    </div>
-  `;
-
-  document.querySelectorAll(".option").forEach((el, i) => {
-    el.onclick = () => {
-      answers[currentIndex] = i;
-      renderQuestion();
-      renderNav();
-    };
-  });
+/**********************
+ * LOAD QUESTIONS
+ **********************/
+async function loadQuestions() {
+  const res = await fetch("questions.json", { cache: "no-store" });
+  questions = await res.json();
+  questions = questions.sort(() => Math.random() - 0.5);
 }
 
-/***********************
- * NAVIGATION
- ***********************/
-function renderNav() {
-  navBox.innerHTML = "";
-  questions.forEach((_, i) => {
+/**********************
+ * RENDER QUESTIONS
+ **********************/
+function renderQuestions() {
+  questionsEl.innerHTML = "";
+  questions.forEach((q, i) => {
     const div = document.createElement("div");
-    div.className = "circle";
-    if (answers[i] !== undefined) div.classList.add("answered");
-    if (i === currentIndex) div.classList.add("current");
-    div.innerText = i + 1;
-    div.onclick = () => {
-      currentIndex = i;
-      renderQuestion();
-      renderNav();
-    };
-    navBox.appendChild(div);
+    div.className = "question";
+    div.innerHTML = `
+      <p><b>${i + 1}. ${q.q}</b></p>
+      <div class="options">
+        ${q.options
+          .map(
+            (opt, idx) => `
+          <label class="option">
+            <input type="radio" name="q${i}" value="${idx}">
+            ${opt}
+          </label>`
+          )
+          .join("")}
+      </div>
+    `;
+    questionsEl.appendChild(div);
+  });
+
+  document.querySelectorAll("input[type=radio]").forEach((el) => {
+    el.addEventListener("change", (e) => {
+      const qIndex = parseInt(e.target.name.replace("q", ""));
+      answers[qIndex] = parseInt(e.target.value);
+    });
   });
 }
 
-prevBtn.onclick = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderQuestion();
-    renderNav();
-  }
-};
-
-nextBtn.onclick = () => {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    renderQuestion();
-    renderNav();
-  }
-};
-
-/***********************
+/**********************
  * TIMER
- ***********************/
+ **********************/
 function startTimer() {
-  startTime = Date.now();
-  const totalMs = EXAM_DURATION_MIN * 60 * 1000;
+  timeLeft = questions.length * TIME_PER_QUESTION;
+  updateTimer();
 
   timerInterval = setInterval(() => {
-    const elapsed = Date.now() - startTime;
-    const left = totalMs - elapsed;
-
-    if (left <= 0) {
-      clearInterval(timerInterval);
-      submitExam(true);
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) {
+      autoSubmit("Waktu habis");
     }
-
-    const m = Math.floor(left / 60000);
-    const s = Math.floor((left % 60000) / 1000);
-    timerEl.innerText = `Waktu: ${m}:${s.toString().padStart(2, "0")}`;
   }, 1000);
 }
 
-/***********************
- * SUBMIT
- ***********************/
-submitBtn.onclick = () => submitExam(false);
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  timerEl.textContent = `Waktu: ${m}:${s < 10 ? "0" + s : s}`;
+}
 
-function submitExam(isAuto) {
-  clearInterval(timerInterval);
+/**********************
+ * SUBMIT
+ **********************/
+function submitExam(isAuto = false, reason = "") {
+  if (submitted) return;
+  submitted = true;
   autoSubmitted = isAuto;
+  clearInterval(timerInterval);
 
   let score = 0;
   questions.forEach((q, i) => {
@@ -174,80 +115,118 @@ function submitExam(isAuto) {
   if (autoSubmitted) {
     resultText.innerHTML = `
       <b>Ujian dihentikan otomatis</b><br>
-      Karena terdeteksi pelanggaran.<br>
-      Skor Anda: ${score}/${questions.length}
+      Alasan: ${reason}<br><br>
+      Skor: <b>${score}/${questions.length}</b>
     `;
+    reviewContainer.innerHTML = "";
   } else {
-    renderReview(score);
+    resultText.innerHTML = `
+      Nama: <b>${studentName.value}</b> |
+      NIM: <b>${studentNim.value}</b><br>
+      Skor: <b>${score}/${questions.length}</b>
+    `;
+    renderReview();
   }
 
-  sendResult(score);
+  sendResult(score, reason);
 }
 
-/***********************
+/**********************
  * REVIEW
- ***********************/
-function renderReview(score) {
-  let html = `<b>Skor: ${score}/${questions.length}</b><hr>`;
+ **********************/
+function renderReview() {
+  let html = "<h3>Review Jawaban</h3>";
+
   questions.forEach((q, i) => {
-    const correct = q.answer === answers[i];
+    const userAnswer = answers[i];
+    const correct = userAnswer === q.answer;
+
     html += `
-      <p>
-        <b>${i + 1}. ${q.q}</b><br>
-        Jawaban Anda: ${q.options[answers[i]] || "-"}<br>
-        Jawaban Benar: ${q.options[q.answer]}<br>
-        <span style="color:${correct ? "#4caf50" : "#f44336"}">
+      <div class="question">
+        <p><b>${i + 1}. ${q.q}</b></p>
+        <p>Jawaban Anda: <b>${userAnswer !== undefined ? q.options[userAnswer] : "-"}</b></p>
+        <p>Jawaban Benar: <b>${q.options[q.answer]}</b></p>
+        <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
           ${correct ? "✔ Benar" : "✘ Salah"}
-        </span>
-      </p>
-      <hr>
+        </p>
+      </div>
     `;
   });
-  resultText.innerHTML = html;
+
+  reviewContainer.innerHTML = html;
 }
 
-/***********************
- * SEND RESULT
- ***********************/
-function sendResult(score) {
+/**********************
+ * SEND TO GOOGLE SHEET
+ **********************/
+function sendResult(score, reason) {
+  if (!GOOGLE_SCRIPT_URL) return;
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
+    mode: "no-cors",
     body: JSON.stringify({
       name: studentName.value,
       nim: studentNim.value,
       class: studentClass.value,
       score,
-      autoSubmitted
-    })
-  }).catch(() => {});
+      reason,
+      timestamp: new Date().toISOString(),
+    }),
+  });
 }
 
-/***********************
- * SECURITY
- ***********************/
-function enableSecurity() {
-  document.documentElement.requestFullscreen?.();
+/**********************
+ * ANTI CHEAT
+ **********************/
+function autoSubmit(reason) {
+  alert("Pelanggaran terdeteksi: " + reason);
+  submitExam(true, reason);
+}
 
-  document.addEventListener("copy", e => e.preventDefault());
-  document.addEventListener("cut", e => e.preventDefault());
-  document.addEventListener("paste", e => e.preventDefault());
-  document.addEventListener("contextmenu", e => e.preventDefault());
-
+function setupAntiCheat() {
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) submitExam(true);
+    if (document.hidden) autoSubmit("Berpindah tab");
   });
 
   document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement) submitExam(true);
+    if (!document.fullscreenElement) autoSubmit("Keluar fullscreen");
   });
 
-  document.addEventListener("keydown", e => {
-    if (
-      e.key === "F12" ||
-      (e.ctrlKey && ["c", "v", "x", "u", "s"].includes(e.key.toLowerCase()))
-    ) {
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey)) {
       e.preventDefault();
-      submitExam(true);
+      autoSubmit("Developer tools");
     }
   });
 }
+
+/**********************
+ * START EXAM
+ **********************/
+document.getElementById("start-btn").addEventListener("click", async () => {
+  if (!studentName.value || !studentNim.value || !studentClass.value) {
+    alert("Lengkapi data");
+    return;
+  }
+
+  await loadQuestions();
+  renderQuestions();
+  loginPage.style.display = "none";
+  examPage.style.display = "block";
+
+  setupAntiCheat();
+  startTimer();
+
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
+});
+
+/**********************
+ * BUTTONS
+ **********************/
+document.getElementById("submit-btn").addEventListener("click", () => {
+  if (confirm("Kirim jawaban sekarang?")) submitExam(false);
+});
