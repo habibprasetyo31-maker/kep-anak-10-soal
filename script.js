@@ -9,11 +9,9 @@ const TIME_PER_QUESTION = 60;
  **********************/
 let questions = [];
 let answers = {};
-let currentIndex = 0;
 let timerInterval = null;
 let timeLeft = 0;
 let submitted = false;
-let autoSubmitted = false;
 
 /**********************
  * ELEMENTS
@@ -28,7 +26,6 @@ const studentClass = document.getElementById("student-class");
 
 const questionsEl = document.getElementById("questions");
 const resultText = document.getElementById("result-text");
-const reviewContainer = document.getElementById("review-container");
 const timerEl = document.getElementById("timer");
 
 /**********************
@@ -45,23 +42,27 @@ async function loadQuestions() {
  **********************/
 function renderQuestions() {
   questionsEl.innerHTML = "";
+
   questions.forEach((q, i) => {
     const div = document.createElement("div");
     div.className = "question";
+
     div.innerHTML = `
-      <p><b>${i + 1}. ${q.q}</b></p>
+      <p><b>${i + 1}. ${q.question}</b></p>
       <div class="options">
         ${q.options
           .map(
             (opt, idx) => `
-          <label class="option">
-            <input type="radio" name="q${i}" value="${idx}">
-            ${opt}
-          </label>`
+            <label class="option">
+              <input type="radio" name="q${i}" value="${idx}">
+              ${opt}
+            </label>
+          `
           )
           .join("")}
       </div>
     `;
+
     questionsEl.appendChild(div);
   });
 
@@ -101,7 +102,7 @@ function updateTimer() {
 function submitExam(isAuto = false, reason = "") {
   if (submitted) return;
   submitted = true;
-  autoSubmitted = isAuto;
+
   clearInterval(timerInterval);
 
   let score = 0;
@@ -112,19 +113,19 @@ function submitExam(isAuto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  if (autoSubmitted) {
+  if (isAuto) {
     resultText.innerHTML = `
-      <b>Ujian dihentikan otomatis</b><br>
+      <b>UJIAN DIHENTIKAN OTOMATIS</b><br>
       Alasan: ${reason}<br><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
-    reviewContainer.innerHTML = "";
   } else {
     resultText.innerHTML = `
-      Nama: <b>${studentName.value}</b> |
+      Nama: <b>${studentName.value}</b><br>
       NIM: <b>${studentNim.value}</b><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
+
     renderReview();
   }
 
@@ -132,35 +133,40 @@ function submitExam(isAuto = false, reason = "") {
 }
 
 /**********************
- * REVIEW
+ * REVIEW JAWABAN
  **********************/
 function renderReview() {
-  let html = "<h3>Review Jawaban</h3>";
+  const container = document.createElement("div");
+  container.style.marginTop = "20px";
 
   questions.forEach((q, i) => {
     const userAnswer = answers[i];
     const correct = userAnswer === q.answer;
 
-    html += `
-      <div class="question">
-        <p><b>${i + 1}. ${q.q}</b></p>
-        <p>Jawaban Anda: <b>${userAnswer !== undefined ? q.options[userAnswer] : "-"}</b></p>
-        <p>Jawaban Benar: <b>${q.options[q.answer]}</b></p>
-        <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
-          ${correct ? "✔ Benar" : "✘ Salah"}
-        </p>
-      </div>
+    const div = document.createElement("div");
+    div.className = "question";
+
+    div.innerHTML = `
+      <p><b>${i + 1}. ${q.question}</b></p>
+      <p>Jawaban Anda: <b>${userAnswer !== undefined ? q.options[userAnswer] : "-"}</b></p>
+      <p>Jawaban Benar: <b>${q.options[q.answer]}</b></p>
+      <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
+        ${correct ? "✔ Benar" : "✘ Salah"}
+      </p>
     `;
+
+    container.appendChild(div);
   });
 
-  reviewContainer.innerHTML = html;
+  resultPage.querySelector(".card").appendChild(container);
 }
 
 /**********************
- * SEND TO GOOGLE SHEET
+ * SEND RESULT
  **********************/
 function sendResult(score, reason) {
   if (!GOOGLE_SCRIPT_URL) return;
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -197,7 +203,7 @@ function setupAntiCheat() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "F12" || (e.ctrlKey && e.shiftKey)) {
       e.preventDefault();
-      autoSubmit("Developer tools");
+      autoSubmit("Membuka developer tools");
     }
   });
 }
@@ -213,6 +219,7 @@ document.getElementById("start-btn").addEventListener("click", async () => {
 
   await loadQuestions();
   renderQuestions();
+
   loginPage.style.display = "none";
   examPage.style.display = "block";
 
@@ -225,8 +232,10 @@ document.getElementById("start-btn").addEventListener("click", async () => {
 });
 
 /**********************
- * BUTTONS
+ * SUBMIT BUTTON
  **********************/
 document.getElementById("submit-btn").addEventListener("click", () => {
-  if (confirm("Kirim jawaban sekarang?")) submitExam(false);
+  if (confirm("Kirim jawaban sekarang?")) {
+    submitExam(false);
+  }
 });
