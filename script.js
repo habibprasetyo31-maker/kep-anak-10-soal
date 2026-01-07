@@ -29,6 +29,13 @@ const resultText = document.getElementById("result-text");
 const timerEl = document.getElementById("timer");
 
 /**********************
+ * SAFE QUESTION TEXT
+ **********************/
+function getQuestionText(q) {
+  return q.text || q.question || q.soal || "Soal tidak tersedia";
+}
+
+/**********************
  * LOAD QUESTIONS
  **********************/
 async function loadQuestions() {
@@ -48,7 +55,7 @@ function renderQuestions() {
     div.className = "question";
 
     div.innerHTML = `
-      <p><b>${i + 1}. ${q.text}</b></p>
+      <p><b>${i + 1}. ${getQuestionText(q)}</b></p>
       <div class="options">
         ${q.options
           .map(
@@ -84,9 +91,7 @@ function startTimer() {
   timerInterval = setInterval(() => {
     timeLeft--;
     updateTimer();
-    if (timeLeft <= 0) {
-      autoSubmit("Waktu habis");
-    }
+    if (timeLeft <= 0) autoSubmit("Waktu habis");
   }, 1000);
 }
 
@@ -102,7 +107,6 @@ function updateTimer() {
 function submitExam(isAuto = false, reason = "") {
   if (submitted) return;
   submitted = true;
-
   clearInterval(timerInterval);
 
   let score = 0;
@@ -113,26 +117,19 @@ function submitExam(isAuto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  if (isAuto) {
-    resultText.innerHTML = `
-      <b>UJIAN DIHENTIKAN OTOMATIS</b><br>
-      Alasan: ${reason}<br><br>
-      Skor: <b>${score}/${questions.length}</b>
-    `;
-  } else {
-    resultText.innerHTML = `
-      Nama: <b>${studentName.value}</b><br>
-      NIM: <b>${studentNim.value}</b><br>
-      Skor: <b>${score}/${questions.length}</b>
-    `;
-    renderReview();
-  }
+  resultText.innerHTML = isAuto
+    ? `<b>UJIAN DIHENTIKAN OTOMATIS</b><br>Alasan: ${reason}<br><br>
+       Skor: <b>${score}/${questions.length}</b>`
+    : `Nama: <b>${studentName.value}</b><br>
+       NIM: <b>${studentNim.value}</b><br>
+       Skor: <b>${score}/${questions.length}</b>`;
 
+  if (!isAuto) renderReview();
   sendResult(score, reason);
 }
 
 /**********************
- * REVIEW JAWABAN
+ * REVIEW
  **********************/
 function renderReview() {
   const container = document.createElement("div");
@@ -142,19 +139,16 @@ function renderReview() {
     const userAnswer = answers[i];
     const correct = userAnswer === q.correct;
 
-    const div = document.createElement("div");
-    div.className = "question";
-
-    div.innerHTML = `
-      <p><b>${i + 1}. ${q.text}</b></p>
-      <p>Jawaban Anda: <b>${userAnswer || "-"}</b></p>
-      <p>Jawaban Benar: <b>${q.correct}</b></p>
-      <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
-        ${correct ? "✔ Benar" : "✘ Salah"}
-      </p>
+    container.innerHTML += `
+      <div class="question">
+        <p><b>${i + 1}. ${getQuestionText(q)}</b></p>
+        <p>Jawaban Anda: <b>${userAnswer ?? "-"}</b></p>
+        <p>Jawaban Benar: <b>${q.correct}</b></p>
+        <p style="font-weight:600;color:${correct ? "#4caf50" : "#f44336"}">
+          ${correct ? "✔ Benar" : "✘ Salah"}
+        </p>
+      </div>
     `;
-
-    container.appendChild(div);
   });
 
   resultPage.querySelector(".card").appendChild(container);
@@ -208,7 +202,7 @@ function setupAntiCheat() {
 }
 
 /**********************
- * START EXAM
+ * START
  **********************/
 document.getElementById("start-btn").addEventListener("click", async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
@@ -225,14 +219,9 @@ document.getElementById("start-btn").addEventListener("click", async () => {
   setupAntiCheat();
   startTimer();
 
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen();
-  }
+  document.documentElement.requestFullscreen?.();
 });
 
-/**********************
- * SUBMIT BUTTON
- **********************/
 document.getElementById("submit-btn").addEventListener("click", () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 });
