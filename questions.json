@@ -1,0 +1,123 @@
+[
+  {
+    "id": 1,
+    "text": "Anak usia 6 tahun dirawat dengan diagnosis epilepsi. Saat perawat masuk ruangan, anak mengalami kejang tonik-klonik generalisata selama ±1 menit. Tindakan prioritas pertama perawat adalah:",
+    "options": [
+      "Memasang oksigen 6 L/menit",
+      "Menahan ekstremitas agar tidak cedera",
+      "Melonggarkan pakaian dan posisikan miring",
+      "Memasang infus dan menyiapkan diazepam"
+    ],
+    "correct": "Melonggarkan pakaian dan posisikan miring"
+  },
+  {
+    "id": 2,
+    "text": "Anak dengan meningitis bakteri menunjukkan tanda kaku kuduk, demam tinggi, dan penurunan kesadaran. Diagnosis keperawatan paling tepat adalah:",
+    "options": [
+      "Gangguan perfusi jaringan serebral",
+      "Risiko defisit nutrisi",
+      "Hipertermia",
+      "Risiko cedera"
+    ],
+    "correct": "Hipertermia"
+  },
+  {
+    "id": 3,
+    "text": "Pada anak dengan ensefalitis, mekanisme utama terjadinya penurunan kesadaran adalah:",
+    "options": [
+      "Hipoksia akibat gangguan respirasi",
+      "Edema serebri dan peningkatan TIK",
+      "Gangguan elektrolit",
+      "Hipoglikemia"
+    ],
+    "correct": "Gangguan elektrolit"
+  },
+  {
+    "id": 4,
+    "text": "Bayi dengan hidrosefalus menunjukkan pembesaran lingkar kepala cepat. Tindakan keperawatan yang harus dihindari adalah:",
+    "options": [
+      "Mengukur lingkar kepala rutin",
+      "Memposisikan kepala lebih tinggi",
+      "Mengangkat bayi dengan menopang kepala",
+      "Menekan ubun-ubun untuk menilai tekanan"
+    ],
+    "correct": "Mengangkat bayi dengan menopang kepala"
+  },
+  {
+    "id": 5,
+    "text": "Tujuan utama pemasangan VP-shunt pada anak hidrosefalus adalah:",
+    "options": [
+      "Mengurangi risiko infeksi",
+      "Mengalirkan cairan serebrospinal berlebih",
+      "Menurunkan suhu tubuh",
+      "Memperbaiki fungsi motorik"
+    ],
+    "correct": "Menurunkan suhu tubuh"
+  },
+  {
+    "id": 6,
+    "text": "Anak epilepsi sering tidak patuh minum obat karena merasa “sudah sembuh”. Intervensi keperawatan paling efektif adalah:",
+    "options": [
+      "Memberi hukuman edukatif",
+      "Edukasi kepada orang tua tentang terapi jangka panjang",
+      "Mengganti obat antikejang",
+      "Menghentikan obat sementara"
+    ],
+    "correct": "Mengganti obat antikejang"
+  },
+  {
+    "id": 7,
+    "text": "Tanda awal peningkatan TIK pada anak adalah:",
+    "options": [
+      "Bradikardia",
+      "Hipotensi",
+      "Perubahan perilaku dan gelisah",
+      "Muntah proyektil berulang"
+    ],
+    "correct": "Perubahan perilaku dan gelisah"
+  },
+  {
+    "id": 8,
+    "text": "Pada anak dengan kejang demam, faktor pemicu utama adalah:",
+    "options": [
+      "Infeksi sistem saraf pusat",
+      "Ketidakseimbangan elektrolit",
+      "Kenaikan suhu tubuh cepat",
+      "Riwayat trauma kepala"
+    ],
+    "correct": "Kenaikan suhu tubuh cepat"
+  },
+  {
+    "id": 9,
+    "text": "Intervensi edukasi orang tua pada anak epilepsi yang benar adalah:",
+    "options": [
+      "Obat boleh dihentikan bila tidak kejang",
+      "Anak dilarang aktivitas fisik",
+      "Catat waktu dan durasi kejang",
+      "Masukkan benda keras ke mulut saat kejang"
+    ],
+    "correct": "Catat waktu dan durasi kejang"
+  },
+  {
+    "id": 10,
+    "text": "Anak meningitis dengan fontanel menonjol, muntah, dan kejang. Prioritas keperawatan adalah:",
+    "options": [
+      "Nutrisi enteral",
+      "Pencegahan cedera",
+      "Manajemen jalan napas",
+      "Edukasi keluarga"
+    ],
+    "correct": "Manajemen jalan napas"
+  },
+  {
+    "id": 11,
+    "text": "Soal menjebak: Pada anak kejang, tindakan yang benar adalah:",
+    "options": [
+      "Menahan lidah dengan sendok",
+      "Menahan ekstremitas kuat",
+      "Memberikan cairan oral",
+      "Melonggarkan pakaian dan posisikan miring"
+    ],
+    "correct": "Memberikan cairan oral"
+  },
+]
