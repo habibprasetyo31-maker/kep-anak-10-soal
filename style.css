@@ -185,17 +185,18 @@ html,body{
   text-align:center;
 }
 
-/* ===== BOTTOM NAV ===== */
+/* ===== BOTTOM NAV (DEFAULT – WAJIB) ===== */
+.bottom-nav{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:30px auto;
+  max-width:var(--max-width);
+  padding:0 16px;
+}
 
 /* DESKTOP */
 @media(min-width:901px){
-  .bottom-nav{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    margin:30px auto;
-    max-width:var(--max-width);
-  }
   .nav-btn{
     background:#0f1720;
     border:none;
@@ -221,6 +222,8 @@ html,body{
 @media(max-width:900px){
   .main{flex-direction:column;padding:12px}
   .sidebar{width:100%}
+  .content{padding-bottom:90px}
+
   .nav-circle{
     display:flex;
     overflow:auto;
@@ -231,15 +234,15 @@ html,body{
     min-width:44px;
     flex:0 0 auto;
   }
+
   .bottom-nav{
-    display:flex;
     position:fixed;
     bottom:12px;
     left:12px;
     right:12px;
-    gap:8px;
     z-index:9999;
   }
+
   .nav-btn{
     flex:1;
     background:#0f1720;
@@ -258,4 +261,11 @@ html,body{
     color:#fff;
     font-weight:700;
   }
+}
+
+/* INTERACTION */
+.nav-btn:hover,
+.submit-btn:hover{
+  opacity:.9;
+  transform:translateY(-1px);
 }
