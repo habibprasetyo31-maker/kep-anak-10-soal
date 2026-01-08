@@ -1,0 +1,717 @@
+[
+  {
+    "id": 1,
+    "text": "Seorang laki-laki berusia 70 tahun diantar ke IGD RSUD Lembang dengan penurunan kesadaran akibat nyeri dada yang menjalar ke lengan kiri sejak 30 menit yang lalu. Pada pemeriksaan EKG ditemukan gambaran ventrikel tachycardia (VT). Apakah tindakan keperawatan yang paling tepat pada pasien tersebut?",
+    "options": [
+      "Lakukan RJP 30 : 2",
+      "Pasang infus dua jalur",
+      "Melakukan DC shock 360 joule",
+      "Berikan adrenalin 1 mg intravena"
+    ],
+    "correct": "Lakukan RJP 30 : 2"
+  },
+  {
+    "id": 2,
+    "text": "Seorang laki-laki berusia 27 tahun dibawa ke UGD RSUD Lembang karena kecelakaan lalu lintas. Pasien menarik anggota badan bila diberi rangsang nyeri, suara tidak jelas, dan tidak membuka mata saat diberi rangsang nyeri. Berapakah nilai GCS pada pasien di atas?",
+    "options": ["6", "7", "8", "9"],
+    "correct": "7"
+  },
+  {
+    "id": 3,
+    "text": "Seorang perempuan berusia 23 tahun mengalami kecelakaan lalu lintas. Pasien membuka mata ketika diberi rangsang nyeri, berbicara kacau tidak dimengerti, dan posisi ekstremitas cenderung fleksi abnormal. Berapakah nilai GCS pada pasien di atas?",
+    "options": ["8", "9", "10", "11"],
+    "correct": "8"
+  },
+  {
+    "id": 4,
+    "text": "Seorang remaja berusia 19 tahun dibawa ke UGD karena kecelakaan lalu lintas dengan penurunan kesadaran, suara ngorok, keluar darah dari hidung dan telinga. Apakah tindakan utama yang harus dilakukan pada pasien tersebut?",
+    "options": ["Pasang infus", "Pasang oksigen", "Bebaskan jalan napas", "Lakukan perawatan luka"],
+    "correct": "Bebaskan jalan napas"
+  },
+  {
+    "id": 5,
+    "text": "Seorang laki-laki berusia 46 tahun dibawa ke UGD RSUD Lembang setelah jatuh dari atap rumah. Pasien mengalami penurunan kesadaran dan lidah mengalami prolapsus ke belakang. Tindakan selanjutnya?",
+    "options": ["Pasang infus", "Buka jalan napas", "Cek respon pasien", "Berikan napas buatan"],
+    "correct": "Buka jalan napas"
+  },
+  {
+    "id": 6,
+    "text": "Seorang perempuan berusia 45 tahun datang ke UGD RSUD Lembang. Frekuensi napas 34x/menit, tidak teratur, penggunaan otot tambahan, sputum banyak, refleks batuk kurang. Diagnosa keperawatan yang tepat?",
+    "options": [
+      "Pola napas tidak efektif",
+      "Penurunan curah jantung",
+      "Gangguan perfusi jaringan perifer",
+      "Bersihan jalan napas tidak efektif"
+    ],
+    "correct": "Bersihan jalan napas tidak efektif"
+  },
+  {
+    "id": 7,
+    "text": "Tn. M, 44 tahun, dirawat dengan TB aktif. Pernafasan 24/menit, ronchi pada paru, sputum banyak, IMT 16, pucat dan kelelahan. Diagnosa keperawatan prioritas yang tepat?",
+    "options": [
+      "Bersihan jalan napas tidak efektif berhubungan dengan akumulasi sekret",
+      "Intoleransi aktivitas berhubungan dengan kelemahan",
+      "Gangguan nutrisi kurang dari kebutuhan berhubungan dengan hipermetabolik",
+      "Gangguan pertukaran gas berhubungan dengan infeksi bronkial"
+    ],
+    "correct": "Bersihan jalan napas tidak efektif berhubungan dengan akumulasi sekret"
+  },
+  {
+    "id": 8,
+    "text": "Seorang wanita berusia 30 tahun jatuh dari motor dan mengalami cedera kepala. Tidak sadar, pupil anisokor, nadi cepat dan lemah, RR 28x/menit. Penanganan awal yang tepat?",
+    "options": [
+      "Lakukan RJP",
+      "Berikan napas buatan",
+      "Lakukan perawatan luka",
+      "Proteksi servikal dan potensi jalan napas"
+    ],
+    "correct": "Proteksi servikal dan potensi jalan napas"
+  },
+  {
+    "id": 9,
+    "text": "Seorang perempuan berusia 20 tahun datang ke UGD RSUD Lembang dengan nyeri ulu hati, muntah merah kecoklatan, distensi abdomen, TD 120/80, Nadi 88, Suhu 38°C, RR 26. Tindakan yang tepat?",
+    "options": ["Pemasangan infus", "Pemasangan oksigen", "Pemberian kompres hangat", "Semua jawaban salah"],
+    "correct": "Semua jawaban salah"
+  },
+  {
+    "id": 10,
+    "text": "Seorang laki-laki 35 tahun mengalami luka bakar di muka dan leher. Batuk dengan sputum hitam, suara serak, rambut nasal terbakar, PO2 80%, PCO2 50%, Hb 8 gr/dL. Masalah keperawatan yang tepat?",
+    "options": [
+      "Nyeri akut",
+      "Defisit volume cairan",
+      "Perubahan perfusi jaringan",
+      "Gangguan pertukaran gas"
+    ],
+    "correct": "Gangguan pertukaran gas"
+  },
+  {
+    "id": 11,
+    "text": "Seorang laki-laki usia 56 tahun dirawat. Pasien mual dan muntah, dijelaskan tentang endoskopi. Pernyataan pasien yang menunjukkan pemahaman yang tepat adalah:",
+    "options": [
+      "Saya senang tidak perlu mendapat bius umum",
+      "Saya senang tidak perlu berbaring untuk prosedur ini",
+      "Saya senang akan diberi obat penenang melalui infus",
+      "Saya mengerti, saya harus menandatangani surat persetujuan"
+    ],
+    "correct": "Saya mengerti, saya harus menandatangani surat persetujuan"
+  },
+  {
+    "id": 12,
+    "text": "Seorang laki-laki 30 tahun dirawat karena pansitopenia dan transfusi trombosit. Riwayat typhoid 2 tahun lalu. Pengkajian selanjutnya?",
+    "options": [
+      "Lamanya hari perawatan masa lalu",
+      "Jenis penyakit lanjutan setelah typhoid",
+      "Jenis makanan saat sakit dahulu",
+      "Jenis obat yang diminum saat typhoid"
+    ],
+    "correct": "Jenis obat yang diminum saat typhoid"
+  },
+  {
+    "id": 13,
+    "text": "Seorang perempuan datang ke poli kebidanan mengeluh telat menstruasi 2 minggu. Pemeriksaan selanjutnya?",
+    "options": ["Memeriksa HCG", "Memeriksa Aseton", "Memeriksa Hemoglobin", "Memeriksa Kadar Protein"],
+    "correct": "Memeriksa HCG"
+  },
+  {
+    "id": 14,
+    "text": "Seorang ibu memeriksakan kehamilan, taksiran berat janin 500 gram. Berapa usia janin tersebut?",
+    "options": ["2–8 minggu", "16–20 minggu", "21–25 minggu", "26–31 minggu"],
+    "correct": "21–25 minggu"
+  },
+  {
+    "id": 15,
+    "text": "Laki-laki 50 tahun datang untuk skrining, konstipasi, tinja berdarah hitam, massa kolon. Faktor risiko kanker kolon?",
+    "options": [
+      "Riwayat merokok",
+      "Riwayat peradangan lambung",
+      "Kebiasaan makan makanan instan",
+      "Riwayat peradangan kolon atau polip"
+    ],
+    "correct": "Riwayat peradangan kolon atau polip"
+  },
+  {
+    "id": 16,
+    "text": "Perempuan 48 tahun dirawat dengan keluhan nyeri perut kanan atas, setelah endoskopi mual dan ingin muntah. Tindakan keperawatan prioritas?",
+    "options": [
+      "Memonitor suhu tubuh",
+      "Memonitor rasa panas di dada",
+      "Menuntun agar dapat bersendawa",
+      "Menuntun agar dapat buang angin (flatus)"
+    ],
+    "correct": "Menuntun agar dapat bersendawa"
+  },
+  {
+    "id": 17,
+    "text": "Pria 50 tahun dengan anemia karena gagal ginjal, Hb 5 gr%, transfusi PRC 480 cc. Perkiraan peningkatan Hb?",
+    "options": ["1 gr%", "2 gr%", "3 gr%", "4 gr%"],
+    "correct": "2 gr%"
+  },
+  {
+    "id": 18,
+    "text": "Perawat baru di puskesmas, pasien akan melahirkan tanpa tenaga ahli, jarak ke RS jauh. Tindakan pertama?",
+    "options": [
+      "Menyiapkan set persalinan",
+      "Menenangkan pasien dan keluarga",
+      "Menempatkan pasien di ruang bersalin",
+      "Menginstruksikan pasien tidak mengejan"
+    ],
+    "correct": "Menempatkan pasien di ruang bersalin"
+  },
+  {
+    "id": 19,
+    "text": "Perempuan G3P2A0, hamil 36 minggu, mengeluh lemas dan pucat, Hb 8 gr%. Diagnosa keperawatan yang tepat?",
+    "options": [
+      "Risiko bayi berat lahir rendah karena anemia",
+      "Gangguan nutrisi kurang dari kebutuhan",
+      "Risiko cedera maternal",
+      "Gangguan perfusi jaringan karena suplai oksigen menurun"
+    ],
+    "correct": "Gangguan perfusi jaringan karena suplai oksigen menurun"
+  },
+  {
+    "id": 20,
+    "text": "Perempuan 25 tahun, hamil 37–38 minggu, kala II persalinan, pembukaan 8 cm selama 2 jam tanpa kemajuan. Keluarga ingin beri air rebusan rumput fatimah. Apa respon perawat?",
+    "options": [
+      "Silakan saja diberikan, tapi sedikit saja",
+      "Ibu sabar ya, sebentar lagi pembukaan lengkap",
+      "Saat ini pasien sudah ditangani, kita tunggu reaksinya",
+      "Maaf bu, air rumput fatimah bisa membahayakan janin"
+    ],
+    "correct": "Saat ini pasien sudah ditangani, kita tunggu reaksinya"
+  },
+  {
+    "id": 21,
+    "text": "Ny. G, 29 tahun, pasca operasi sectio caesarea kedua. Perawatan segera pasca operasi yang TIDAK perlu dilakukan?",
+    "options": [
+      "Palpasi fundus uteri tiap 15 menit",
+      "Pemantauan tanda vital tiap 15 menit",
+      "Pemeriksaan perdarahan luka tiap 15 menit",
+      "Mengusap fundus uteri agar tetap nyaman tiap 15 menit"
+    ],
+    "correct": "Mengusap fundus uteri agar tetap nyaman tiap 15 menit"
+  },
+  {
+    "id": 22,
+    "text": "An. V, 7 tahun dibawa ke UGD karena asma bronchial, RR cepat dan wheezing. Tujuan pemberian epinephrine?",
+    "options": [
+      "Mencegah produksi histamin",
+      "Relaksasi otot bronkus",
+      "Mengencerkan sekresi bronkus",
+      "Menurunkan inflamasi bronchial"
+    ],
+    "correct": "Relaksasi otot bronkus"
+  },
+  {
+    "id": 23,
+    "text": "Perawat menjelaskan cara pemberian insulin suntik kepada orang tua klien. Hal pertama yang harus didiskusikan?",
+    "options": [
+      "Cara memegang spuit insulin",
+      "Prinsip aseptik dalam penyuntikan",
+      "Menghitung dosis yang tepat",
+      "Cara rotasi penyuntikan"
+    ],
+    "correct": "Prinsip aseptik dalam penyuntikan"
+  },
+  {
+    "id": 24,
+    "text": "Tn. R, 33 tahun dengan perdarahan dan penurunan volume vaskuler direncanakan mendapat terapi poligeline 1000 ml dalam 8 jam. Berapa tetes infus yang diberikan?",
+    "options": ["42 tetes/menit", "30 tetes/menit", "50 tetes/menit", "45 tetes/menit"],
+    "correct": "42 tetes/menit"
+  },
+  {
+    "id": 25,
+    "text": "Pasien datang dengan bengkak pada kedua kaki dan sesak. Menunjukkan gangguan ginjal bila ditemukan data?",
+    "options": [
+      "Albumin 3,20 mg/dL",
+      "Ureum plasma 194 mg/dL",
+      "Kalium 2,7 mEq/L",
+      "Kreatinin plasma 1,02 mg/dL"
+    ],
+    "correct": "Ureum plasma 194 mg/dL"
+  },
+  {
+    "id": 26,
+    "text": "Pasien tidur namun membuka mata saat diberi rangsangan suara keras, menarik tangan dari sumber rangsang, suara tidak bermakna. GCS yang benar?",
+    "options": ["E2M2V2", "E3M2V2", "E3M4V3", "E3M3V3"],
+    "correct": "E3M4V3"
+  },
+  {
+    "id": 27,
+    "text": "Tn. A, 44 tahun, riwayat peminum alkohol, menjadi kasar dan marah kepada staf. Respon terbaik perawat?",
+    "options": [
+      "Kami memiliki staf kompeten dan melayani terbaik",
+      "Maaf, saya tidak izinkan Anda bicara seperti itu",
+      "Anda terlihat sangat marah, apakah ingin membicarakannya?",
+      "Apa yang Anda inginkan dari staf kami, Tn. A?"
+    ],
+    "correct": "Anda terlihat sangat marah, apakah ingin membicarakannya?"
+  },
+  {
+    "id": 28,
+    "text": "Klien dengan riwayat CAD memakai aspirin rutin akan operasi apendiks. Tindakan terbaik?",
+    "options": [
+      "Dicatat dan dilaporkan ke dokter",
+      "Dicatat tapi tidak perlu dilaporkan",
+      "Dilaporkan karena berisiko perdarahan",
+      "Dilaporkan karena berisiko alergi zat kontras"
+    ],
+    "correct": "Dilaporkan karena berisiko perdarahan"
+  },
+  {
+    "id": 29,
+    "text": "Pasca operasi, klien transfusi PRC. Tindakan tambahan untuk meningkatkan perfusi sistemik?",
+    "options": [
+      "Pemberian oksigen",
+      "Pemberian bikarbonat",
+      "Pemberian NaCl 0,9%",
+      "Pemberian glukosa 5%"
+    ],
+    "correct": "Pemberian oksigen"
+  },
+  {
+    "id": 30,
+    "text": "Ny. B, 1 hari pasca operasi histerektomi, tidak bisa tidur, nyeri jahitan, takut bergerak. Tindakan terbaik?",
+    "options": [
+      "Berikan obat anti nyeri agar cepat tidur",
+      "Diskusikan cara mengurangi nyeri",
+      "Berikan susu hangat untuk kantuk",
+      "Bantu ubah posisi, pijat punggung, dan beri obat nyeri"
+    ],
+    "correct": "Bantu ubah posisi, pijat punggung, dan beri obat nyeri"
+  },
+  {
+    "id": 31,
+    "text": "Yang BUKAN komponen Apgar Score adalah...",
+    "options": ["Berat badan", "Warna", "Usaha bernapas", "Tonus otot"],
+    "correct": "Berat badan"
+  },
+  {
+    "id": 32,
+    "text": "Refleks tonik pada leher bayi ditunjukkan dengan...",
+    "options": [
+      "Posisi menegang (fencing)",
+      "Refleks koordinatif mengisap dan menelan",
+      "Refleks startle",
+      "Kekakuan leher saat diangkat"
+    ],
+    "correct": "Posisi menegang (fencing)"
+  },
+  {
+    "id": 33,
+    "text": "Perbedaan pelvis wanita dari pria adalah...",
+    "options": [
+      "Lebih berat, tinggi dan lebar",
+      "Lebih ringan, lebar dan dalam",
+      "Lebih lebar dan bulat pada inlet",
+      "Lebih kecil pada arcus pubik"
+    ],
+    "correct": "Lebih lebar dan bulat pada inlet"
+  },
+  {
+    "id": 34,
+    "text": "Anak laki-laki 4 tahun sering marah jika ayah dekat dengan ibu. Masalah perkembangan yang terjadi?",
+    "options": [
+      "Gagal tumbuh (failure to thrive)",
+      "Enuresis fungsional",
+      "Mutisme afektif",
+      "Konflik oedipus"
+    ],
+    "correct": "Konflik oedipus"
+  },
+  {
+    "id": 35,
+    "text": "Anak perempuan 18 bulan batuk, RR 45x/menit, suhu 38°C, retraksi interkostal, stridor. Tindakan kolaboratif?",
+    "options": [
+      "Pemberian pereda batuk",
+      "Obat penurun panas",
+      "Terapi inhalasi",
+      "Antibiotik"
+    ],
+    "correct": "Antibiotik"
+  },
+  {
+    "id": 36,
+    "text": "Anak laki-laki 3 tahun, BAK sedikit dan nyeri, penis melengkung sejak lahir. Masalah keperawatan?",
+    "options": [
+      "Gangguan citra tubuh",
+      "Gangguan eliminasi urin",
+      "Risiko infeksi",
+      "Nyeri akut"
+    ],
+    "correct": "Gangguan eliminasi urin"
+  },
+  {
+    "id": 37,
+    "text": "Balita 2 tahun dibawa ke UGD karena diare berat, kesadaran menurun, kulit turgor jelek, nadi cepat lemah, CRT >3 detik. Diagnosa keperawatan yang tepat?",
+    "options": [
+      "Defisit volume cairan",
+      "Gangguan perfusi jaringan",
+      "Risiko syok hipovolemik",
+      "Risiko ketidakseimbangan cairan"
+    ],
+    "correct": "Defisit volume cairan"
+  },
+  {
+    "id": 38,
+    "text": "Bayi 8 bulan dengan pneumonia berat, RR 70x/menit, suhu 39°C, retraksi dada, saturasi 85%. Tindakan awal?",
+    "options": [
+      "Pemberian antipiretik",
+      "Pemberian oksigen",
+      "Pemberian antibiotik oral",
+      "Posisi miring kanan"
+    ],
+    "correct": "Pemberian oksigen"
+  },
+  {
+    "id": 39,
+    "text": "Remaja 14 tahun dengan nyeri kepala hebat setelah jatuh. Pupil anisokor, muntah proyektil, kesadaran menurun. Diagnosa keperawatan?",
+    "options": [
+      "Risiko cedera",
+      "Gangguan perfusi serebral",
+      "Nyeri akut",
+      "Gangguan pola tidur"
+    ],
+    "correct": "Gangguan perfusi serebral"
+  },
+  {
+    "id": 40,
+    "text": "Pasien post operasi laparotomi, TD 90/60 mmHg, Nadi 120x/menit, RR 30x/menit, kulit dingin lembab, urine 20 cc/jam. Diagnosa keperawatan yang tepat?",
+    "options": [
+      "Risiko infeksi",
+      "Defisit volume cairan",
+      "Gangguan perfusi jaringan perifer",
+      "Intoleransi aktivitas"
+    ],
+    "correct": "Defisit volume cairan"
+  },
+  {
+    "id": 41,
+    "text": "Pasien kecelakaan lalu lintas dalam keadaan sadar mengeluh nyeri dada, napas cepat RR 30x/menit, SpO₂ 90%. Hasil auskultasi menunjukkan bunyi napas melemah di sisi kiri. Intervensi yang tepat dilakukan perawat adalah…",
+    "options": [
+      "Berikan posisi trendelenburg",
+      "Pasang nasal kanul 2 LPM",
+      "Berikan cairan cepat",
+      "Lakukan fisioterapi dada"
+    ],
+    "correct": "Berikan cairan cepat"
+  },
+  {
+    "id": 42,
+    "text": "Perawat melihat keluarga pasien memotret rekam medis pasien secara diam-diam tanpa izin. Tindakan perawat yang tepat adalah…",
+    "options": [
+      "Menghapus foto pada ponsel keluarga",
+      "Menegur keras keluarga pasien",
+      "Melaporkan kepada atasan dan tim hukum rumah sakit",
+      "Mengabaikan karena bukan masalah besar"
+    ],
+    "correct": "Melaporkan kepada atasan dan tim hukum rumah sakit"
+  },
+  {
+    "id": 43,
+    "text": "Ibu postpartum 2 jam setelah persalinan pervaginam mengalami perdarahan ±500 ml, fundus uteri tidak teraba, TD 90/60 mmHg, Nadi 110x/menit. Intervensi keperawatan yang tepat adalah…",
+    "options": [
+      "Memberikan uterotonik oral",
+      "Kompres dingin abdomen",
+      "Melakukan masase uterus",
+      "Memberikan infus D5%"
+    ],
+    "correct": "Melakukan masase uterus"
+  },
+  {
+    "id": 44,
+    "text": "Pasien 30 tahun datang ke IGD setelah kecelakaan lalu lintas, kesadaran menurun, tidak merespons verbal, membuka mata saat dipanggil keras, menarik tangan saat rangsang nyeri. Prioritas tindakan keperawatan adalah…",
+    "options": [
+      "Pemasangan kateter urin",
+      "Menilai tanda vital terlebih dahulu",
+      "Mengamankan jalan napas (airway)",
+      "Pemasangan bidai ekstremitas"
+    ],
+    "correct": "Mengamankan jalan napas (airway)"
+  },
+  {
+    "id": 45,
+    "text": "Seorang perawat mendengar dua rekan sejawat membicarakan status pasien HIV tanpa izin pasien. Tindakan perawat adalah…",
+    "options": [
+      "Mengingatkan pasien terkait risiko infeksi",
+      "Melaporkan kejadian kepada manajer keperawatan",
+      "Mengambil alih perawatan pasien",
+      "Menegur rekan sejawat di depan pasien"
+    ],
+    "correct": "Mengambil alih perawatan pasien"
+  },
+  {
+    "id": 46,
+    "text": "Di sebuah desa ditemukan peningkatan kasus diare pada balita selama 1 minggu terakhir. Tindakan perawat komunitas adalah…",
+    "options": [
+      "Memberi oralit ke seluruh balita",
+      "Survei epidemiologi dan pelaporan",
+      "Melakukan penyuluhan gizi",
+      "Mendistribusikan vitamin A"
+    ],
+    "correct": "Melakukan penyuluhan gizi"
+  },
+  {
+    "id": 47,
+    "text": "Perawat komunitas mengunjungi lansia hipertensi dengan penglihatan menurun yang tinggal sendiri dan sering lupa minum obat. Tindakan keperawatan terbaik adalah…",
+    "options": [
+      "Menghentikan seluruh obat hipertensi",
+      "Mengunjungi pasien setiap hari",
+      "Membuat jadwal minum obat dengan reminder visual",
+      "Menitipkan obat ke tetangga"
+    ],
+    "correct": "Membuat jadwal minum obat dengan reminder visual"
+  },
+  {
+    "id": 48,
+    "text": "Kepala ruang menemukan peningkatan angka infeksi luka operasi selama 2 bulan terakhir. Langkah awal dalam manajemen keperawatan adalah…",
+    "options": [
+      "Menyusun program pelatihan",
+      "Melakukan pengkajian dan audit praktik aseptik",
+      "Membeli alat steril baru",
+      "Membuat SOP baru"
+    ],
+    "correct": "Membeli alat steril baru"
+  },
+  {
+    "id": 49,
+    "text": "Pasien 60 tahun mengeluh mual, muntah, lemas, napas cepat berbau aseton, GD 305 mg/dL, pH 7.30, PCO₂ 30 mmHg. Tindakan keperawatan adalah…",
+    "options": [
+      "Memberikan glukosa IV",
+      "Memberikan insulin intravena cepat",
+      "Memberikan diet rendah gula",
+      "Memberikan bronkodilator"
+    ],
+    "correct": "Memberikan diet rendah gula"
+  },
+  {
+    "id": 50,
+    "text": "Laki-laki 50 tahun dengan gas darah pH 7.30, PCO₂ 58 mmHg, PO₂ 80 mmHg, HCO₃⁻ 27 mEq/L. Gangguan asam-basa yang terjadi adalah…",
+    "options": [
+      "Alkalosis respiratorik",
+      "Alkalosis metabolik",
+      "Asidosis respiratorik",
+      "Asidosis metabolik"
+    ],
+    "correct": "Asidosis respiratorik"
+  },
+  {
+    "id": 51,
+    "text": "Pasien pasca pneumonektomi hari pertama, skala nyeri 7/10, TD 130 mmHg, N 98x/menit. Tindakan keperawatan adalah…",
+    "options": [
+      "Memberikan kompres hangat",
+      "Kolaborasi pemberian analgesik",
+      "Menurunkan posisi kepala",
+      "Melakukan ambulasi segera"
+    ],
+    "correct": "Menurunkan posisi kepala"
+  },
+  {
+    "id": 52,
+    "text": "Laki-laki 60 tahun dengan sesak napas, edema tungkai, foto toraks tampak bendungan paru. Masalah keperawatan adalah…",
+    "options": [
+      "Kurang volume cairan",
+      "Kelebihan volume cairan paru",
+      "Gangguan perfusi jaringan",
+      "Intoleransi aktivitas"
+    ],
+    "correct": "Gangguan perfusi jaringan"
+  },
+  {
+    "id": 53,
+    "text": "Lansia riwayat BTA positif, batuk 3 bulan, dahak sulit keluar, hanya ludah. Tindakan perawat adalah…",
+    "options": [
+      "Memberikan antipiretik",
+      "Mengajarkan teknik batuk efektif",
+      "Memberikan diet tinggi kalori",
+      "Melakukan suction rutin"
+    ],
+    "correct": "Memberikan diet tinggi kalori"
+  },
+  {
+    "id": 54,
+    "text": "Sebanyak 65% warga tidak cuci tangan sebelum makan, 68% PHBS belum benar. Tindakan perawat adalah…",
+    "options": [
+      "Menyediakan tempat cuci tangan",
+      "Pendidikan kesehatan tentang PHBS",
+      "Membagikan brosur",
+      "Memberikan suplemen zinc"
+    ],
+    "correct": "Membagikan brosur"
+  },
+  {
+    "id": 55,
+    "text": "Perempuan 45 tahun menjalani pengobatan TB selama 3 bulan, mengeluh mual dan muntah. Tindakan utama perawat adalah…",
+    "options": [
+      "Menghentikan OAT",
+      "Menganjurkan makan porsi kecil tapi sering",
+      "Memberikan antibiotik tambahan",
+      "Mengganti obat OAT"
+    ],
+    "correct": "Memberikan antibiotik tambahan"
+  },
+  {
+    "id": 56,
+    "text": "Laki-laki 50 tahun batuk 3 minggu, BB turun, keringat malam, lelah. Pemeriksaan penunjang yang tepat adalah…",
+    "options": [
+      "EKG",
+      "Rontgen abdomen",
+      "Pemeriksaan dahak BTA",
+      "Pemeriksaan gula darah"
+    ],
+    "correct": "Pemeriksaan dahak BTA"
+  },
+  {
+    "id": 57,
+    "text": "Perempuan 18 tahun korban rudal paksa, tampak putus asa, sulit tidur, tidak selera makan. Masalah keperawatan yang tepat adalah…",
+    "options": [
+      "Harga diri rendah",
+      "Koping tidak efektif",
+      "Keputusasaan",
+      "Risiko kekerasan"
+    ],
+    "correct": "Keputusasaan"
+  },
+  {
+    "id": 58,
+    "text": "Laki-laki 29 tahun di RSJ merasa telah meninggal dan berada di surga. Terapi aktivitas kelompok yang tepat adalah…",
+    "options": [
+      "Sosialisasi",
+      "Orientasi realita",
+      "Stimulasi kognitif",
+      "Bermain peran"
+    ],
+    "correct": "Stimulasi kognitif"
+  },
+  {
+    "id": 59,
+    "text": "Anak SD pucat, mengantuk, letih, CRT >3 detik, penurunan BB 8%, Hb 10 g/dL. Masalah keperawatan adalah…",
+    "options": [
+      "Gangguan nutrisi",
+      "Perfusi perifer tidak efektif",
+      "Risiko syok",
+      "Intoleransi aktivitas"
+    ],
+    "correct": "Risiko syok"
+  },
+  {
+    "id": 60,
+    "text": "Tn. M usia 48 tahun, GDS 64 mg/dL, lemas, keringat dingin, gelisah, masih sadar namun tidak mau makan. Intervensi yang tepat…",
+    "options": [
+      "Berikan insulin",
+      "Berikan minuman manis",
+      "Berikan OAT",
+      "Berikan oksigen 5 LPM"
+    ],
+    "correct": "Berikan OAT"
+  },
+  {
+    "id": 61,
+    "text": "Infus RL 3 flas selama 12 jam, faktor tetes 15 tpm. Setelah berjalan 9 jam tersisa 800 ml. Berapa tpm agar habis sesuai waktu?",
+    "options": [
+      "45 tpm",
+      "55 tpm",
+      "67 tpm",
+      "70 tpm"
+    ],
+    "correct": "67 tpm"
+  },
+  {
+    "id": 62,
+    "text": "Berikut ini yang termasuk penyakit keturunan adalah…",
+    "options": [
+      "Pneumonia, TBC, Asma",
+      "Diabetes mellitus, hipertensi, asma",
+      "Demam tifoid, diabetes, TB",
+      "Asma, malaria, hipertensi"
+    ],
+    "correct": "Demam tifoid, diabetes, TB"
+  },
+  {
+    "id": 63,
+    "text": "Imunisasi yang berfungsi mencegah radang hati dan kanker hati adalah…",
+    "options": [
+      "DPT",
+      "Polio",
+      "Hepatitis B",
+      "Influenza"
+    ],
+    "correct": "Hepatitis B"
+  },
+  {
+    "id": 64,
+    "text": "Pria 55 tahun dalam kondisi henti napas dan henti jantung. Setelah memastikan keamanan tempat, langkah selanjutnya adalah…",
+    "options": [
+      "Memberikan napas buatan",
+      "Menilai denyut nadi",
+      "Melakukan emergency call",
+      "Melakukan kompresi dada langsung"
+    ],
+    "correct": "Melakukan emergency call"
+  },
+  {
+    "id": 65,
+    "text": "Laki-laki 20 tahun dengan sklera ikterik, kulit kuning, BAK kuning 2 hari. Pemeriksaan lanjutan yang tepat…",
+    "options": [
+      "BUN dan kreatinin",
+      "SGOT/SGPT",
+      "Elektrolit darah",
+      "Foto toraks"
+    ],
+    "correct": "Elektrolit darah"
+  },
+  {
+    "id": 66,
+    "text": "Bayi baru lahir Apgar 5 pada menit pertama. Dilakukan penghisapan lendir elektrik tekanan tinggi. Risiko komplikasi adalah…",
+    "options": [
+      "Hipertermia",
+      "Asfiksia",
+      "Hipoglikemia",
+      "Aspirasi makanan"
+    ],
+    "correct": "Hipoglikemia"
+  },
+  {
+    "id": 67,
+    "text": "Bayi BAB >10x/24 jam, cair, muntah, mata cekung, bibir kering. Masalah keperawatan adalah…",
+    "options": [
+      "Kerusakan integritas kulit",
+      "Hipovolemia",
+      "Diare kronis",
+      "Risiko infeksi"
+    ],
+    "correct": "Diare kronis"
+  },
+  {
+    "id": 68,
+    "text": "Laki-laki 30 tahun melakukan kekerasan karena merasa dihina tetangga. Masalah keperawatan adalah…",
+    "options": [
+      "Risiko harga diri rendah",
+      "Perilaku kekerasan",
+      "Risiko isolasi sosial",
+      "Koping konstruktif"
+    ],
+    "correct": "Risiko isolasi sosial"
+  },
+  {
+    "id": 69,
+    "text": "Laki-laki 53 tahun kecelakaan, fraktur tertutup femur sinistra, TD 90/60, N 110x/menit. Tindakan keperawatan adalah…",
+    "options": [
+      "Kompres hangat",
+      "Pasang IV line",
+      "Lakukan latihan ROM",
+      "Berikan analgesik oral"
+    ],
+    "correct": "Lakukan latihan ROM"
+  },
+  {
+    "id": 70,
+    "text": "Anak 10 tahun dengan HIV sering bertanya tentang penyakitnya, namun nenek melarang perawat menjelaskan. Dilema etik yang terjadi adalah…",
+    "options": [
+      "Autonomi",
+      "Justice",
+      "Beneficence",
+      "Confidentiality"
+    ],
+    "correct": "Beneficence"
+  }
+]
