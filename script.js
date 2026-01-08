@@ -27,9 +27,25 @@ const numbersEl = document.getElementById("question-numbers");
 const timerEl = document.getElementById("timer");
 const resultText = document.getElementById("result-text");
 
+/* input peserta */
 const studentName = document.getElementById("student-name");
 const studentNim = document.getElementById("student-nim");
 const studentClass = document.getElementById("student-class");
+
+/* info peserta - sidebar */
+const infoName = document.getElementById("info-name");
+const infoNim = document.getElementById("info-nim");
+const infoClass = document.getElementById("info-class");
+
+/* info peserta - result */
+const resultName = document.getElementById("result-name");
+const resultNim = document.getElementById("result-nim");
+const resultClass = document.getElementById("result-class");
+
+/* tombol */
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+const submitBtn = document.getElementById("submit-btn");
 
 /**********************
  * LOAD QUESTIONS
@@ -38,7 +54,7 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // Random soal & opsi
+  // random soal & opsi
   data = data.sort(() => Math.random() - 0.5);
   data.forEach(q => q.options.sort(() => Math.random() - 0.5));
 
@@ -46,7 +62,7 @@ async function loadQuestions() {
 }
 
 /**********************
- * RENDER SINGLE QUESTION
+ * RENDER QUESTION
  **********************/
 function renderQuestion() {
   const q = questions[currentIndex];
@@ -59,12 +75,18 @@ function renderQuestion() {
   div.innerHTML = `
     <p><b>${currentIndex + 1}. ${q.text}</b></p>
     <div class="options">
-      ${q.options.map(opt => `
-        <label class="option ${answers[currentIndex] === opt ? "selected" : ""}">
+      ${q.options
+        .map(
+          opt => `
+        <label class="option ${
+          answers[currentIndex] === opt ? "selected" : ""
+        }">
           <input type="radio" name="q${currentIndex}" value="${opt}">
           <span>${opt}</span>
         </label>
-      `).join("")}
+      `
+        )
+        .join("")}
     </div>
   `;
 
@@ -74,8 +96,8 @@ function renderQuestion() {
     input.onchange = e => {
       answers[currentIndex] = e.target.value;
 
-      // update selected UI
-      div.querySelectorAll(".option")
+      div
+        .querySelectorAll(".option")
         .forEach(o => o.classList.remove("selected"));
       input.closest(".option").classList.add("selected");
 
@@ -87,10 +109,11 @@ function renderQuestion() {
 
   updateNav();
   updateSubmitVisibility();
+  updateNavButtons();
 }
 
 /**********************
- * NAVIGATION
+ * NAVIGATION CIRCLE
  **********************/
 function renderNav() {
   numbersEl.innerHTML = "";
@@ -114,23 +137,30 @@ function updateNav() {
   });
 }
 
+/**********************
+ * NAV BUTTON STATE
+ **********************/
+function updateNavButtons() {
+  prevBtn.disabled = currentIndex === 0;
+  nextBtn.disabled = currentIndex === questions.length - 1;
+}
+
 function updateSubmitVisibility() {
-  const submitBtn = document.getElementById("submit-btn");
   submitBtn.style.display =
     currentIndex === questions.length - 1 ? "inline-block" : "none";
 }
 
 /**********************
- * BUTTON NAV
+ * BUTTON EVENTS
  **********************/
-document.getElementById("next-btn").onclick = () => {
+nextBtn.onclick = () => {
   if (currentIndex < questions.length - 1) {
     currentIndex++;
     renderQuestion();
   }
 };
 
-document.getElementById("prev-btn").onclick = () => {
+prevBtn.onclick = () => {
   if (currentIndex > 0) {
     currentIndex--;
     renderQuestion();
@@ -171,9 +201,13 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // switch to light result
-  document.body.style.background = "#f8fafc";
-  document.body.style.color = "#111827";
+  // aktifkan mode hasil (terang)
+  document.body.classList.add("result-mode");
+
+  // tampilkan info peserta di hasil
+  resultName.textContent = studentName.value;
+  resultNim.textContent = studentNim.value;
+  resultClass.textContent = studentClass.value;
 
   let correct = 0;
   questions.forEach((q, i) => {
@@ -244,13 +278,21 @@ window.addEventListener("beforeunload", () => {
 });
 
 /**********************
- * START
+ * START EXAM
  **********************/
 document.getElementById("start-btn").onclick = async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
     alert("Lengkapi data peserta");
     return;
   }
+
+  // pastikan mode gelap aktif
+  document.body.classList.remove("result-mode");
+
+  // isi info peserta di sidebar
+  infoName.textContent = studentName.value;
+  infoNim.textContent = studentNim.value;
+  infoClass.textContent = studentClass.value;
 
   await loadQuestions();
   renderNav();
@@ -266,6 +308,6 @@ document.getElementById("start-btn").onclick = async () => {
   document.documentElement.requestFullscreen?.();
 };
 
-document.getElementById("submit-btn").onclick = () => {
+submitBtn.onclick = () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 };
