@@ -1,11 +1,15 @@
-/* NAV NUMBER – DISAMAKAN DENGAN script.js */
+/* ===============================
+   NAV NUMBER – FIXED & SINKRON
+   =============================== */
+
 .nav-circle{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:10px;
 }
 
-.nav-number{
+/* tombol nomor soal */
+.nav-circle .circle{
   width:44px;
   height:44px;
   border-radius:50%;
@@ -20,19 +24,19 @@
   transition:all .15s ease;
 }
 
-/* Soal SUDAH DIJAWAB */
-.nav-number.answered{
+/* SOAL SUDAH DIJAWAB */
+.nav-circle .circle.answered{
   background:linear-gradient(90deg,var(--accent),var(--accent-2));
   color:#012033;
 }
 
-/* Soal AKTIF */
-.nav-number.active{
+/* SOAL AKTIF / SEDANG DIBUKA */
+.nav-circle .circle.current{
   outline:3px solid rgba(100,181,246,0.25);
   transform:scale(1.08);
 }
 
-/* Hover */
-.nav-number:hover{
+/* hover */
+.nav-circle .circle:hover{
   background:rgba(255,255,255,0.08);
 }
