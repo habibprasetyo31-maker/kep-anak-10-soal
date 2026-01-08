@@ -31,10 +31,6 @@ const studentName = document.getElementById("student-name");
 const studentNim = document.getElementById("student-nim");
 const studentClass = document.getElementById("student-class");
 
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
-const submitBtn = document.getElementById("submit-btn");
-
 /**********************
  * LOAD QUESTIONS
  **********************/
@@ -42,7 +38,7 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // random soal & opsi
+  // Random soal & opsi
   data = data.sort(() => Math.random() - 0.5);
   data.forEach(q => q.options.sort(() => Math.random() - 0.5));
 
@@ -50,7 +46,7 @@ async function loadQuestions() {
 }
 
 /**********************
- * RENDER QUESTION
+ * RENDER SINGLE QUESTION
  **********************/
 function renderQuestion() {
   const q = questions[currentIndex];
@@ -63,18 +59,12 @@ function renderQuestion() {
   div.innerHTML = `
     <p><b>${currentIndex + 1}. ${q.text}</b></p>
     <div class="options">
-      ${q.options
-        .map(
-          opt => `
-        <label class="option ${
-          answers[currentIndex] === opt ? "selected" : ""
-        }">
+      ${q.options.map(opt => `
+        <label class="option ${answers[currentIndex] === opt ? "selected" : ""}">
           <input type="radio" name="q${currentIndex}" value="${opt}">
           <span>${opt}</span>
         </label>
-      `
-        )
-        .join("")}
+      `).join("")}
     </div>
   `;
 
@@ -84,8 +74,8 @@ function renderQuestion() {
     input.onchange = e => {
       answers[currentIndex] = e.target.value;
 
-      div
-        .querySelectorAll(".option")
+      // update selected UI
+      div.querySelectorAll(".option")
         .forEach(o => o.classList.remove("selected"));
       input.closest(".option").classList.add("selected");
 
@@ -97,11 +87,10 @@ function renderQuestion() {
 
   updateNav();
   updateSubmitVisibility();
-  updateNavButtons();
 }
 
 /**********************
- * QUESTION NAV CIRCLE
+ * NAVIGATION
  **********************/
 function renderNav() {
   numbersEl.innerHTML = "";
@@ -125,30 +114,23 @@ function updateNav() {
   });
 }
 
-/**********************
- * NAV BUTTON STATE
- **********************/
-function updateNavButtons() {
-  prevBtn.disabled = currentIndex === 0;
-  nextBtn.disabled = currentIndex === questions.length - 1;
-}
-
 function updateSubmitVisibility() {
+  const submitBtn = document.getElementById("submit-btn");
   submitBtn.style.display =
     currentIndex === questions.length - 1 ? "inline-block" : "none";
 }
 
 /**********************
- * BUTTON EVENTS
+ * BUTTON NAV
  **********************/
-nextBtn.onclick = () => {
+document.getElementById("next-btn").onclick = () => {
   if (currentIndex < questions.length - 1) {
     currentIndex++;
     renderQuestion();
   }
 };
 
-prevBtn.onclick = () => {
+document.getElementById("prev-btn").onclick = () => {
   if (currentIndex > 0) {
     currentIndex--;
     renderQuestion();
@@ -189,6 +171,7 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
+  // switch to light result
   document.body.style.background = "#f8fafc";
   document.body.style.color = "#111827";
 
@@ -261,7 +244,7 @@ window.addEventListener("beforeunload", () => {
 });
 
 /**********************
- * START EXAM
+ * START
  **********************/
 document.getElementById("start-btn").onclick = async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
@@ -283,6 +266,6 @@ document.getElementById("start-btn").onclick = async () => {
   document.documentElement.requestFullscreen?.();
 };
 
-submitBtn.onclick = () => {
+document.getElementById("submit-btn").onclick = () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 };
