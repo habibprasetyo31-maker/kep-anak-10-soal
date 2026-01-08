@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Ujian Online - Dark Elegant</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body autocomplete="off">
+
+<!-- ================= LOGIN PAGE ================= -->
+<div id="login-page" class="page center">
+  <div class="card login-card">
+    <h1>Ujian Online - Kelas D</h1>
+
+    <input id="student-name" type="text" placeholder="Nama Lengkap" autocomplete="off" />
+    <input id="student-nim" type="text" placeholder="NIM" autocomplete="off" />
+    <input id="student-class" type="text" placeholder="Kelas" autocomplete="off" />
+
+    <div class="row">
+      <button id="start-btn" class="primary" type="button">
+        Mulai Ujian
+      </button>
+    </div>
+
+    <p class="note">
+      Mode portrait direkomendasikan.<br>
+      Fullscreen & sistem keamanan aktif.
+    </p>
+  </div>
+</div>
+
+<!-- ================= EXAM PAGE ================= -->
+<div id="exam-page" class="page" style="display:none;">
+
+  <header class="topbar">
+    <div class="brand">📝 Ujian - Kelas D</div>
+    <div id="timer" class="timer">Waktu: 00:00</div>
+  </header>
+
+  <main class="main">
+
+    <!-- ===== SOAL ===== -->
+    <section class="content">
+      <div id="questions" class="questions"></div>
+    </section>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+
+      <div class="panel sticky-nav">
+        <h4>Nomor Soal</h4>
+        <div id="question-numbers" class="nav-circle"></div>
+      </div>
+
+      <div class="panel">
+        <h4>Informasi Peserta</h4>
+        <p id="info-student">
+          <span id="info-name">-</span><br>
+          <span id="info-nim">-</span><br>
+          <span id="info-class">-</span>
+        </p>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ===== NAVIGATION ===== -->
+  <div class="bottom-nav">
+    <button id="prev-btn" class="nav-btn" type="button">
+      ‹ Sebelumnya
+    </button>
+    <button id="next-btn" class="nav-btn" type="button">
+      Selanjutnya ›
+    </button>
+    <button id="submit-btn" class="submit-btn" type="button">
+      Kirim Jawaban
+    </button>
+  </div>
+
+</div>
+
+<!-- ================= RESULT PAGE ================= -->
+<div id="result-page" class="page center" style="display:none;">
+  <div class="card result-card">
+    <h2>Hasil Ujian</h2>
+
+    <p id="result-text"></p>
+
+    <!-- REVIEW JAWABAN -->
+    <div id="review-container"></div>
+
+    <p class="note">
+      Halaman ini terkunci.<br>
+      Terima kasih telah mengikuti ujian.
+    </p>
+  </div>
+</div>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+  window.GOOGLE_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbyxqwYcNIqVAjV_KSRO6QiIXMJ2dYdvLehVPAOmAaWKg5l8KhZinhGdrrv1sZEs5ZbZ/exec";
+</script>
+
+<script src="script.js" defer></script>
+</body>
+</html>
