@@ -9,7 +9,6 @@ const TIME_PER_QUESTION = 60;
  **********************/
 let questions = [];
 let answers = {};
-let currentIndex = 0;
 let timerInterval = null;
 let timeLeft = 0;
 let submitted = false;
@@ -39,66 +38,85 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // random soal & opsi
+  // random soal
   data = data.sort(() => Math.random() - 0.5);
-  data.forEach(q => q.options.sort(() => Math.random() - 0.5));
+
+  // random opsi
+  data.forEach(q => {
+    q.options = q.options.sort(() => Math.random() - 0.5);
+  });
 
   questions = data;
 }
 
 /**********************
- * RENDER QUESTION
+ * RENDER ALL QUESTIONS
  **********************/
-function renderQuestion(index) {
-  if (!examRunning) return;
+function renderAllQuestions() {
+  questionsEl.innerHTML = "";
 
-  const q = questions[index];
+  questions.forEach((q, index) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.id = `question-${index}`;
 
-  questionsEl.innerHTML = `
-    <div class="question">
+    div.innerHTML = `
       <p><b>${index + 1}. ${q.text}</b></p>
       <div class="options">
         ${q.options.map(opt => `
           <label class="option ${answers[index] === opt ? "selected" : ""}">
-            <input type="radio" name="q${index}" value="${opt}">
+            <input type="radio" name="q${index}" value="${opt}" ${answers[index] === opt ? "checked" : ""}>
             ${opt}
           </label>
         `).join("")}
       </div>
-    </div>
-  `;
+    `;
 
-  document.querySelectorAll(`input[name="q${index}"]`).forEach(input => {
-    input.checked = answers[index] === input.value;
-    input.onchange = e => {
-      answers[index] = e.target.value;
+    questionsEl.appendChild(div);
+  });
+
+  document.querySelectorAll("input[type=radio]").forEach(input => {
+    input.addEventListener("change", e => {
+      const qIndex = Number(e.target.name.replace("q", ""));
+      answers[qIndex] = e.target.value;
+
+      // reset selected
+      document
+        .querySelectorAll(`input[name="q${qIndex}"]`)
+        .forEach(i => i.closest(".option").classList.remove("selected"));
+
+      e.target.closest(".option").classList.add("selected");
+
       updateNav();
+    });
+  });
+}
+
+/**********************
+ * NAVIGATION NUMBERS
+ **********************/
+function renderNav() {
+  questionNumbersEl.innerHTML = "";
+
+  questions.forEach((_, i) => {
+    const div = document.createElement("div");
+    div.className = "nav-number";
+    div.textContent = i + 1;
+
+    div.onclick = () => {
+      document
+        .getElementById(`question-${i}`)
+        .scrollIntoView({ behavior: "smooth", block: "start" });
     };
+
+    questionNumbersEl.appendChild(div);
   });
 
   updateNav();
 }
 
-/**********************
- * NAVIGATION NUMBER
- **********************/
-function renderNav() {
-  questionNumbersEl.innerHTML = "";
-  questions.forEach((_, i) => {
-    const div = document.createElement("div");
-    div.className = "circle";
-    div.textContent = i + 1;
-    div.onclick = () => {
-      currentIndex = i;
-      renderQuestion(i);
-    };
-    questionNumbersEl.appendChild(div);
-  });
-}
-
 function updateNav() {
-  document.querySelectorAll(".nav-circle .circle").forEach((el, i) => {
-    el.classList.toggle("current", i === currentIndex);
+  document.querySelectorAll(".nav-number").forEach((el, i) => {
     el.classList.toggle("answered", answers[i] !== undefined);
   });
 }
@@ -108,6 +126,8 @@ function updateNav() {
  **********************/
 function startTimer() {
   timeLeft = questions.length * TIME_PER_QUESTION;
+  updateTimer();
+
   timerInterval = setInterval(() => {
     timeLeft--;
     updateTimer();
@@ -126,7 +146,6 @@ function updateTimer() {
  **********************/
 function submitExam(auto = false, reason = "") {
   if (submitted) return;
-
   submitted = true;
   examRunning = false;
 
@@ -141,13 +160,13 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // MODE TERANG UNTUK HASIL
+  // mode terang untuk review
   document.body.style.background = "#f8fafc";
   document.body.style.color = "#111827";
 
   if (auto) {
     resultText.innerHTML = `
-      <b>Ujian dihentikan otomatis</b><br>
+      <b>UJIAN DIHENTIKAN OTOMATIS</b><br>
       Alasan: ${reason}<br><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
@@ -156,7 +175,6 @@ function submitExam(auto = false, reason = "") {
     resultText.innerHTML = `
       Nama: <b>${studentName.value}</b><br>
       NIM: <b>${studentNim.value}</b><br>
-      Kelas: <b>${studentClass.value}</b><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
     renderReview();
@@ -170,19 +188,21 @@ function submitExam(auto = false, reason = "") {
  **********************/
 function renderReview() {
   let html = "<h3>Review Jawaban</h3>";
+
   questions.forEach((q, i) => {
     const benar = answers[i] === q.correct;
     html += `
-      <div class="question">
+      <div class="question" style="background:#fff;border:1px solid #e5e7eb">
         <p><b>${i + 1}. ${q.text}</b></p>
         <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
         <p>Jawaban Benar: <b>${q.correct}</b></p>
-        <p style="color:${benar ? "#16a34a" : "#dc2626"}">
+        <p style="font-weight:600;color:${benar ? "#16a34a" : "#dc2626"}">
           ${benar ? "✔ Benar" : "✘ Salah"}
         </p>
       </div>
     `;
   });
+
   reviewContainer.innerHTML = html;
 }
 
@@ -191,6 +211,7 @@ function renderReview() {
  **********************/
 function sendResult(score, reason) {
   if (!GOOGLE_SCRIPT_URL) return;
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -210,6 +231,7 @@ function sendResult(score, reason) {
  **********************/
 function autoSubmit(reason) {
   if (!examRunning) return;
+  alert("Pelanggaran terdeteksi: " + reason);
   submitExam(true, reason);
 }
 
@@ -224,22 +246,21 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 window.addEventListener("beforeunload", () => {
-  if (!submitted && examRunning) autoSubmit("Refresh halaman");
+  if (examRunning && !submitted) autoSubmit("Refresh halaman");
 });
 
 /**********************
- * START
+ * START EXAM
  **********************/
 document.getElementById("start-btn").onclick = async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
-    alert("Lengkapi data peserta");
+    alert("Lengkapi data");
     return;
   }
 
   await loadQuestions();
   renderNav();
-  currentIndex = 0;
-  renderQuestion(0);
+  renderAllQuestions();
 
   loginPage.style.display = "none";
   examPage.style.display = "block";
@@ -249,20 +270,9 @@ document.getElementById("start-btn").onclick = async () => {
   document.documentElement.requestFullscreen?.();
 };
 
-document.getElementById("next-btn").onclick = () => {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    renderQuestion(currentIndex);
-  }
-};
-
-document.getElementById("prev-btn").onclick = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderQuestion(currentIndex);
-  }
-};
-
+/**********************
+ * SUBMIT BUTTON
+ **********************/
 document.getElementById("submit-btn").onclick = () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 };
