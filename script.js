@@ -14,7 +14,6 @@ let timerInterval = null;
 let timeLeft = 0;
 let submitted = false;
 let examRunning = false;
-let isCheatSubmit = false;
 
 /**********************
  * ELEMENTS
@@ -40,7 +39,7 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // RANDOM SOAL & OPSI
+  // random soal & opsi
   data = data.sort(() => Math.random() - 0.5);
   data.forEach(q => q.options.sort(() => Math.random() - 0.5));
 
@@ -54,13 +53,14 @@ function renderQuestion(index) {
   if (!examRunning) return;
 
   const q = questions[index];
+
   questionsEl.innerHTML = `
     <div class="question">
       <p><b>${index + 1}. ${q.text}</b></p>
       <div class="options">
         ${q.options.map(opt => `
           <label class="option ${answers[index] === opt ? "selected" : ""}">
-            <input type="radio" name="q${index}" value="${opt}" ${answers[index] === opt ? "checked" : ""}>
+            <input type="radio" name="q${index}" value="${opt}">
             ${opt}
           </label>
         `).join("")}
@@ -68,11 +68,11 @@ function renderQuestion(index) {
     </div>
   `;
 
-  document.querySelectorAll("input[type=radio]").forEach(el => {
-    el.onchange = e => {
+  document.querySelectorAll(`input[name="q${index}"]`).forEach(input => {
+    input.checked = answers[index] === input.value;
+    input.onchange = e => {
       answers[index] = e.target.value;
       updateNav();
-      renderQuestion(index);
     };
   });
 
@@ -80,13 +80,13 @@ function renderQuestion(index) {
 }
 
 /**********************
- * NAVIGATION
+ * NAVIGATION NUMBER
  **********************/
 function renderNav() {
   questionNumbersEl.innerHTML = "";
   questions.forEach((_, i) => {
     const div = document.createElement("div");
-    div.className = "nav-number";
+    div.className = "circle";
     div.textContent = i + 1;
     div.onclick = () => {
       currentIndex = i;
@@ -97,8 +97,8 @@ function renderNav() {
 }
 
 function updateNav() {
-  document.querySelectorAll(".nav-number").forEach((el, i) => {
-    el.classList.toggle("active", i === currentIndex);
+  document.querySelectorAll(".nav-circle .circle").forEach((el, i) => {
+    el.classList.toggle("current", i === currentIndex);
     el.classList.toggle("answered", answers[i] !== undefined);
   });
 }
@@ -129,7 +129,6 @@ function submitExam(auto = false, reason = "") {
 
   submitted = true;
   examRunning = false;
-  isCheatSubmit = auto;
 
   clearInterval(timerInterval);
   document.exitFullscreen?.();
@@ -142,7 +141,7 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // ===== MODE TERANG UNTUK HASIL =====
+  // MODE TERANG UNTUK HASIL
   document.body.style.background = "#f8fafc";
   document.body.style.color = "#111827";
 
@@ -157,6 +156,7 @@ function submitExam(auto = false, reason = "") {
     resultText.innerHTML = `
       Nama: <b>${studentName.value}</b><br>
       NIM: <b>${studentNim.value}</b><br>
+      Kelas: <b>${studentClass.value}</b><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
     renderReview();
@@ -173,7 +173,7 @@ function renderReview() {
   questions.forEach((q, i) => {
     const benar = answers[i] === q.correct;
     html += `
-      <div class="question" style="background:#fff;border:1px solid #e5e7eb">
+      <div class="question">
         <p><b>${i + 1}. ${q.text}</b></p>
         <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
         <p>Jawaban Benar: <b>${q.correct}</b></p>
@@ -206,11 +206,10 @@ function sendResult(score, reason) {
 }
 
 /**********************
- * ANTI CHEAT (AKTIF SAAT UJIAN SAJA)
+ * ANTI CHEAT
  **********************/
 function autoSubmit(reason) {
   if (!examRunning) return;
-  alert("Pelanggaran terdeteksi: " + reason);
   submitExam(true, reason);
 }
 
@@ -225,7 +224,7 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 window.addEventListener("beforeunload", () => {
-  if (examRunning) autoSubmit("Refresh halaman");
+  if (!submitted && examRunning) autoSubmit("Refresh halaman");
 });
 
 /**********************
@@ -233,12 +232,13 @@ window.addEventListener("beforeunload", () => {
  **********************/
 document.getElementById("start-btn").onclick = async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
-    alert("Lengkapi data");
+    alert("Lengkapi data peserta");
     return;
   }
 
   await loadQuestions();
   renderNav();
+  currentIndex = 0;
   renderQuestion(0);
 
   loginPage.style.display = "none";
