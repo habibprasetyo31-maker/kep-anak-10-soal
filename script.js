@@ -13,6 +13,7 @@ let currentIndex = 0;
 let timerInterval = null;
 let timeLeft = 0;
 let submitted = false;
+let examRunning = false;
 let isCheatSubmit = false;
 
 /**********************
@@ -39,22 +40,18 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // RANDOM SOAL
+  // RANDOM SOAL & OPSI
   data = data.sort(() => Math.random() - 0.5);
-
-  // RANDOM OPSI
-  data.forEach(q => {
-    q.options = q.options.sort(() => Math.random() - 0.5);
-  });
+  data.forEach(q => q.options.sort(() => Math.random() - 0.5));
 
   questions = data;
 }
 
 /**********************
- * RENDER
+ * RENDER QUESTION
  **********************/
 function renderQuestion(index) {
-  if (submitted) return;
+  if (!examRunning) return;
 
   const q = questions[index];
   questionsEl.innerHTML = `
@@ -72,16 +69,19 @@ function renderQuestion(index) {
   `;
 
   document.querySelectorAll("input[type=radio]").forEach(el => {
-    el.addEventListener("change", e => {
+    el.onchange = e => {
       answers[index] = e.target.value;
-      updateNavStatus();
+      updateNav();
       renderQuestion(index);
-    });
+    };
   });
 
-  updateNavStatus();
+  updateNav();
 }
 
+/**********************
+ * NAVIGATION
+ **********************/
 function renderNav() {
   questionNumbersEl.innerHTML = "";
   questions.forEach((_, i) => {
@@ -90,13 +90,13 @@ function renderNav() {
     div.textContent = i + 1;
     div.onclick = () => {
       currentIndex = i;
-      renderQuestion(currentIndex);
+      renderQuestion(i);
     };
     questionNumbersEl.appendChild(div);
   });
 }
 
-function updateNavStatus() {
+function updateNav() {
   document.querySelectorAll(".nav-number").forEach((el, i) => {
     el.classList.toggle("active", i === currentIndex);
     el.classList.toggle("answered", answers[i] !== undefined);
@@ -108,8 +108,6 @@ function updateNavStatus() {
  **********************/
 function startTimer() {
   timeLeft = questions.length * TIME_PER_QUESTION;
-  updateTimer();
-
   timerInterval = setInterval(() => {
     timeLeft--;
     updateTimer();
@@ -128,10 +126,13 @@ function updateTimer() {
  **********************/
 function submitExam(auto = false, reason = "") {
   if (submitted) return;
+
   submitted = true;
+  examRunning = false;
   isCheatSubmit = auto;
 
   clearInterval(timerInterval);
+  document.exitFullscreen?.();
 
   let score = 0;
   questions.forEach((q, i) => {
@@ -141,12 +142,13 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // PAKSA DARK UI
-  document.body.style.background = "#0b0f12";
+  // ===== MODE TERANG UNTUK HASIL =====
+  document.body.style.background = "#f8fafc";
+  document.body.style.color = "#111827";
 
   if (auto) {
     resultText.innerHTML = `
-      <b>UJIAN DIHENTIKAN OTOMATIS</b><br>
+      <b>Ujian dihentikan otomatis</b><br>
       Alasan: ${reason}<br><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
@@ -163,19 +165,20 @@ function submitExam(auto = false, reason = "") {
   sendResult(score, reason);
 }
 
+/**********************
+ * REVIEW
+ **********************/
 function renderReview() {
-  if (isCheatSubmit) return;
-
   let html = "<h3>Review Jawaban</h3>";
   questions.forEach((q, i) => {
-    const correct = answers[i] === q.correct;
+    const benar = answers[i] === q.correct;
     html += `
-      <div class="question">
+      <div class="question" style="background:#fff;border:1px solid #e5e7eb">
         <p><b>${i + 1}. ${q.text}</b></p>
         <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
         <p>Jawaban Benar: <b>${q.correct}</b></p>
-        <p style="color:${correct ? "#4caf50" : "#f44336"}">
-          ${correct ? "✔ Benar" : "✘ Salah"}
+        <p style="color:${benar ? "#16a34a" : "#dc2626"}">
+          ${benar ? "✔ Benar" : "✘ Salah"}
         </p>
       </div>
     `;
@@ -203,24 +206,26 @@ function sendResult(score, reason) {
 }
 
 /**********************
- * ANTI CHEAT
+ * ANTI CHEAT (AKTIF SAAT UJIAN SAJA)
  **********************/
 function autoSubmit(reason) {
+  if (!examRunning) return;
   alert("Pelanggaran terdeteksi: " + reason);
   submitExam(true, reason);
 }
 
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden && !submitted) autoSubmit("Berpindah tab");
+  if (document.hidden) autoSubmit("Berpindah tab");
 });
 
 document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement && !submitted)
+  if (examRunning && !document.fullscreenElement) {
     autoSubmit("Keluar fullscreen");
+  }
 });
 
 window.addEventListener("beforeunload", () => {
-  if (!submitted) autoSubmit("Refresh halaman");
+  if (examRunning) autoSubmit("Refresh halaman");
 });
 
 /**********************
@@ -239,6 +244,7 @@ document.getElementById("start-btn").onclick = async () => {
   loginPage.style.display = "none";
   examPage.style.display = "block";
 
+  examRunning = true;
   startTimer();
   document.documentElement.requestFullscreen?.();
 };
