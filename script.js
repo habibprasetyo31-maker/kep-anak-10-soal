@@ -38,21 +38,18 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // random soal
   data = data.sort(() => Math.random() - 0.5);
-
-  // random opsi
-  data.forEach(q => {
-    q.options = q.options.sort(() => Math.random() - 0.5);
-  });
+  data.forEach(q => q.options.sort(() => Math.random() - 0.5));
 
   questions = data;
 }
 
 /**********************
- * RENDER ALL QUESTIONS
+ * RENDER ALL QUESTIONS (SCROLL)
  **********************/
 function renderAllQuestions() {
+  if (!examRunning) return;
+
   questionsEl.innerHTML = "";
 
   questions.forEach((q, index) => {
@@ -65,7 +62,7 @@ function renderAllQuestions() {
       <div class="options">
         ${q.options.map(opt => `
           <label class="option ${answers[index] === opt ? "selected" : ""}">
-            <input type="radio" name="q${index}" value="${opt}" ${answers[index] === opt ? "checked" : ""}>
+            <input type="radio" name="q${index}" value="${opt}">
             ${opt}
           </label>
         `).join("")}
@@ -76,31 +73,31 @@ function renderAllQuestions() {
   });
 
   document.querySelectorAll("input[type=radio]").forEach(input => {
-    input.addEventListener("change", e => {
-      const qIndex = Number(e.target.name.replace("q", ""));
+    const qIndex = Number(input.name.replace("q", ""));
+    input.checked = answers[qIndex] === input.value;
+
+    input.onchange = e => {
       answers[qIndex] = e.target.value;
 
-      // reset selected
       document
         .querySelectorAll(`input[name="q${qIndex}"]`)
         .forEach(i => i.closest(".option").classList.remove("selected"));
 
       e.target.closest(".option").classList.add("selected");
-
       updateNav();
-    });
+    };
   });
 }
 
 /**********************
- * NAVIGATION NUMBERS
+ * NAVIGATION NUMBER
  **********************/
 function renderNav() {
   questionNumbersEl.innerHTML = "";
 
   questions.forEach((_, i) => {
     const div = document.createElement("div");
-    div.className = "nav-number";
+    div.className = "circle";
     div.textContent = i + 1;
 
     div.onclick = () => {
@@ -116,7 +113,7 @@ function renderNav() {
 }
 
 function updateNav() {
-  document.querySelectorAll(".nav-number").forEach((el, i) => {
+  document.querySelectorAll(".nav-circle .circle").forEach((el, i) => {
     el.classList.toggle("answered", answers[i] !== undefined);
   });
 }
@@ -160,13 +157,12 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // mode terang untuk review
   document.body.style.background = "#f8fafc";
   document.body.style.color = "#111827";
 
   if (auto) {
     resultText.innerHTML = `
-      <b>UJIAN DIHENTIKAN OTOMATIS</b><br>
+      <b>Ujian dihentikan otomatis</b><br>
       Alasan: ${reason}<br><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
@@ -175,6 +171,7 @@ function submitExam(auto = false, reason = "") {
     resultText.innerHTML = `
       Nama: <b>${studentName.value}</b><br>
       NIM: <b>${studentNim.value}</b><br>
+      Kelas: <b>${studentClass.value}</b><br>
       Skor: <b>${score}/${questions.length}</b>
     `;
     renderReview();
@@ -192,11 +189,11 @@ function renderReview() {
   questions.forEach((q, i) => {
     const benar = answers[i] === q.correct;
     html += `
-      <div class="question" style="background:#fff;border:1px solid #e5e7eb">
+      <div class="question">
         <p><b>${i + 1}. ${q.text}</b></p>
         <p>Jawaban Anda: <b>${answers[i] || "-"}</b></p>
         <p>Jawaban Benar: <b>${q.correct}</b></p>
-        <p style="font-weight:600;color:${benar ? "#16a34a" : "#dc2626"}">
+        <p style="color:${benar ? "#16a34a" : "#dc2626"}">
           ${benar ? "✔ Benar" : "✘ Salah"}
         </p>
       </div>
@@ -231,7 +228,6 @@ function sendResult(score, reason) {
  **********************/
 function autoSubmit(reason) {
   if (!examRunning) return;
-  alert("Pelanggaran terdeteksi: " + reason);
   submitExam(true, reason);
 }
 
@@ -246,32 +242,33 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 window.addEventListener("beforeunload", () => {
-  if (examRunning && !submitted) autoSubmit("Refresh halaman");
+  if (!submitted && examRunning) autoSubmit("Refresh halaman");
 });
 
 /**********************
- * START EXAM
+ * START
  **********************/
 document.getElementById("start-btn").onclick = async () => {
   if (!studentName.value || !studentNim.value || !studentClass.value) {
-    alert("Lengkapi data");
+    alert("Lengkapi data peserta");
     return;
   }
 
   await loadQuestions();
   renderNav();
-  renderAllQuestions();
 
   loginPage.style.display = "none";
   examPage.style.display = "block";
 
   examRunning = true;
+  renderAllQuestions();
   startTimer();
+
   document.documentElement.requestFullscreen?.();
 };
 
 /**********************
- * SUBMIT BUTTON
+ * SUBMIT
  **********************/
 document.getElementById("submit-btn").onclick = () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
