@@ -1,122 +1,255 @@
-/* ===============================
-   FORCE DARK MODE SAAT UJIAN
-   =============================== */
-
-#exam-page {
-  background: var(--bg);
-  color: var(--text);
+:root{
+  --bg:#0b0f12;
+  --card:#1e262b;
+  --muted:#9aa3aa;
+  --text:#f4f7f9;
+  --accent:#2196f3;
+  --accent-2:#64b5f6;
+  --glass: rgba(255,255,255,0.03);
+  --max-width:980px;
+  --radius:12px;
 }
 
-/* soal */
-#exam-page .question {
-  background: var(--card);
-  color: var(--text);
+/* ================= RESET ================= */
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  padding:0;
+  font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* teks soal */
-#exam-page .question p {
-  color: var(--text);
+/* ================= MODE DEFAULT (UJIAN) ================= */
+body{
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* opsi jawaban */
-#exam-page .option {
-  color: var(--text);
-  background: transparent;
+/* ================= PAGE ================= */
+.page.center{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:18px;
 }
 
-/* radio */
-#exam-page .option input {
-  accent-color: var(--accent);
+/* ================= CARD ================= */
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:0 10px 30px rgba(2,6,23,0.6);
+  width:100%;
+  max-width:720px;
 }
 
-/* opsi dipilih */
-#exam-page .option.selected {
-  background: linear-gradient(
-    90deg,
-    rgba(33,150,243,0.15),
-    rgba(100,181,246,0.08)
-  );
-  border-color: rgba(100,181,246,0.3);
+/* ================= LOGIN ================= */
+.login-card h1{
+  margin:0 0 12px;
+  font-size:20px
+}
+.login-card input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:#0f1720;
+  color:var(--text);
+  font-size:15px;
+}
+.login-card .row{
+  display:flex;
+  justify-content:flex-end
+}
+.primary{
+  background:var(--accent);
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600
+}
+.note{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:10px
 }
 
-/* ===============================
-   MODE TERANG KHUSUS REVIEW
-   =============================== */
+/* ================= HEADER ================= */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 20px;
+  position:sticky;
+  top:0;
+  z-index:40;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  background:var(--bg);
+}
+.brand{font-weight:700}
+.timer{font-weight:700;color:var(--accent)}
 
-#result-page {
-  background: #f8fafc;
-  color: #111827;
+/* ================= LAYOUT ================= */
+.main{
+  display:flex;
+  gap:18px;
+  padding:18px;
+  max-width:var(--max-width);
+  margin:8px auto;
+  width:100%;
+}
+.content{flex:1}
+.sidebar{
+  width:220px;
+  display:flex;
+  flex-direction:column;
+  gap:12px
+}
+.panel{
+  background:var(--card);
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.03)
+}
+.sticky-nav{position:sticky;top:80px}
+
+/* ================= QUESTIONS ================= */
+.questions{
+  display:flex;
+  flex-direction:column;
+  gap:14px
+}
+.question{
+  background:var(--card);
+  padding:16px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.04)
+}
+.question p{
+  margin:0 0 12px;
+  font-size:16px;
+  line-height:1.5;
+  color:var(--text)
 }
 
-#result-page .result-card {
-  background: #ffffff;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+/* ================= OPTIONS ================= */
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:10px
+}
+.option{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  cursor:pointer;
+  background:#0f1720;
+  transition:all .15s ease
+}
+.option input{width:18px;height:18px}
+.option:hover{
+  background:rgba(255,255,255,0.04);
+}
+.option.selected{
+  background:linear-gradient(90deg, rgba(33,150,243,0.12), rgba(100,181,246,0.06));
+  border-color:rgba(100,181,246,0.3)
 }
 
-/* review soal */
-#result-page .question {
-  background: #ffffff;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+/* ================= NAV NUMBER ================= */
+.nav-circle{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px
+}
+.nav-circle .circle{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0f1720;
+  border:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;
+  font-weight:600;
+  color:var(--text);
+  transition:all .15s ease
+}
+.nav-circle .circle.answered{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#012033
+}
+.nav-circle .circle.current{
+  outline:3px solid rgba(100,181,246,0.3);
+  transform:scale(1.08)
 }
 
-#result-page .question p {
-  color: #111827;
+/* ================= RESULT MODE (TERANG) ================= */
+#result-page{
+  background:#f8fafc;
+  color:#111827
 }
-/* ===============================
-   DEFAULT MODE – DARK (LOGIN & EXAM)
-   =============================== */
-
-body {
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: var(--text);
+#result-page .card{
+  background:#ffffff;
+  color:#111827;
+  border:1px solid #e5e7eb;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08)
 }
-
-/* ===============================
-   RESULT MODE – LIGHT (REVIEW)
-   =============================== */
-
-body.result-mode {
-  background: #f8fafc;
-  color: #111827;
+#result-page .question{
+  background:#ffffff;
+  border:1px solid #e5e7eb
 }
 
-/* CARD HASIL */
-body.result-mode .result-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  color: #111827;
+/* ================= MOBILE ================= */
+@media(max-width:900px){
+  .main{flex-direction:column;padding:12px}
+  .sidebar{width:100%}
+  .nav-circle{
+    display:flex;
+    overflow:auto;
+    gap:8px;
+    padding:6px
+  }
+  .nav-circle .circle{
+    min-width:44px;
+    flex:0 0 auto
+  }
+  .bottom-nav{
+    display:flex;
+    position:fixed;
+    bottom:12px;
+    left:12px;
+    right:12px;
+    gap:8px;
+    z-index:999
+  }
+  .nav-btn{
+    flex:1;
+    background:#0f1720;
+    border:none;
+    padding:12px;
+    border-radius:10px;
+    color:var(--text);
+    font-weight:600
+  }
+  .submit-btn{
+    flex:1;
+    background:var(--accent);
+    border:none;
+    padding:12px;
+    border-radius:10px;
+    color:#fff;
+    font-weight:700
+  }
 }
 
-/* REVIEW SOAL */
-body.result-mode .question {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-}
-
-/* ===============================
-   NAV NUMBER – FIX INDIKATOR
-   =============================== */
-
-.nav-circle .circle {
-  background: var(--glass);
-  color: var(--text);
-}
-
-/* answered */
-.nav-circle .circle.answered {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #012033;
-}
-
-/* current */
-.nav-circle .circle.current {
-  outline: 3px solid rgba(100,181,246,0.35);
-  transform: scale(1.08);
-}
-
-/* hover */
-.nav-circle .circle:hover {
-  background: rgba(255,255,255,0.1);
-}
+/* ================= UTIL ================= */
+.hidden{display:none}
