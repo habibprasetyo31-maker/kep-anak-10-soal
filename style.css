@@ -1,5 +1,5 @@
 /* ===============================
-   NAV NUMBER – FIXED & SINKRON
+   NAV NUMBER – FINAL SINKRON
    =============================== */
 
 .nav-circle{
@@ -9,7 +9,7 @@
 }
 
 /* tombol nomor soal */
-.nav-circle .circle{
+.nav-number{
   width:44px;
   height:44px;
   border-radius:50%;
@@ -25,29 +25,47 @@
 }
 
 /* SOAL SUDAH DIJAWAB */
-.nav-circle .circle.answered{
+.nav-number.answered{
   background:linear-gradient(90deg,var(--accent),var(--accent-2));
   color:#012033;
 }
 
-/* SOAL AKTIF / SEDANG DIBUKA */
-.nav-circle .circle.current{
-  outline:3px solid rgba(100,181,246,0.25);
+/* SOAL AKTIF */
+.nav-number.active{
+  outline:3px solid rgba(100,181,246,0.3);
   transform:scale(1.08);
 }
 
 /* hover */
-.nav-circle .circle:hover{
+.nav-number:hover{
   background:rgba(255,255,255,0.08);
 }
-/* FORCE DARK RESULT UI */
-#result-page {
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: var(--text);
+
+/* ===============================
+   RESULT PAGE – MODE TERANG
+   =============================== */
+
+#result-page{
+  background:#f8fafc;           /* PUTIH */
+  color:#111827;
 }
 
-.result-card {
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255,255,255,0.05);
+.result-card{
+  background:#ffffff;
+  color:#111827;
+  border:1px solid #e5e7eb;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
+/* Review jawaban */
+#review-container .question{
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  margin-bottom:12px;
+}
+
+/* teks hasil */
+#result-page h2,
+#result-page p{
+  color:#111827;
+}
