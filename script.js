@@ -47,15 +47,13 @@ async function loadQuestions() {
 }
 
 /**********************
- * RENDER QUESTION
+ * RENDER ALL QUESTIONS (SCROLL)
  **********************/
-function renderQuestion(index) {
+function renderAllQuestions() {
   if (!examRunning) return;
 
-  const q = questions[index];
-
-  questionsEl.innerHTML = `
-    <div class="question">
+  questionsEl.innerHTML = questions.map((q, index) => `
+    <div class="question" id="q-${index}">
       <p><b>${index + 1}. ${q.text}</b></p>
       <div class="options">
         ${q.options.map(opt => `
@@ -66,14 +64,18 @@ function renderQuestion(index) {
         `).join("")}
       </div>
     </div>
-  `;
+  `).join("");
 
-  document.querySelectorAll(`input[name="q${index}"]`).forEach(input => {
-    input.checked = answers[index] === input.value;
-    input.onchange = e => {
-      answers[index] = e.target.value;
-      updateNav();
-    };
+  // pasang event
+  questions.forEach((_, index) => {
+    document.querySelectorAll(`input[name="q${index}"]`).forEach(input => {
+      input.checked = answers[index] === input.value;
+      input.onchange = e => {
+        answers[index] = e.target.value;
+        currentIndex = index;
+        updateNav();
+      };
+    });
   });
 
   updateNav();
@@ -90,7 +92,11 @@ function renderNav() {
     div.textContent = i + 1;
     div.onclick = () => {
       currentIndex = i;
-      renderQuestion(i);
+      document.getElementById(`q-${i}`).scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+      updateNav();
     };
     questionNumbersEl.appendChild(div);
   });
@@ -108,6 +114,8 @@ function updateNav() {
  **********************/
 function startTimer() {
   timeLeft = questions.length * TIME_PER_QUESTION;
+  updateTimer();
+
   timerInterval = setInterval(() => {
     timeLeft--;
     updateTimer();
@@ -141,9 +149,8 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // MODE TERANG UNTUK HASIL
-  document.body.style.background = "#f8fafc";
-  document.body.style.color = "#111827";
+  // aktifkan mode terang hanya untuk hasil
+  document.body.classList.add("result-mode");
 
   if (auto) {
     resultText.innerHTML = `
@@ -210,6 +217,7 @@ function sendResult(score, reason) {
  **********************/
 function autoSubmit(reason) {
   if (!examRunning) return;
+  alert("Pelanggaran terdeteksi: " + reason);
   submitExam(true, reason);
 }
 
@@ -236,10 +244,12 @@ document.getElementById("start-btn").onclick = async () => {
     return;
   }
 
+  // pastikan mode dark aktif
+  document.body.classList.remove("result-mode");
+
   await loadQuestions();
   renderNav();
-  currentIndex = 0;
-  renderQuestion(0);
+  renderAllQuestions();
 
   loginPage.style.display = "none";
   examPage.style.display = "block";
@@ -249,20 +259,9 @@ document.getElementById("start-btn").onclick = async () => {
   document.documentElement.requestFullscreen?.();
 };
 
-document.getElementById("next-btn").onclick = () => {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    renderQuestion(currentIndex);
-  }
-};
-
-document.getElementById("prev-btn").onclick = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderQuestion(currentIndex);
-  }
-};
-
+/**********************
+ * NAV BUTTON
+ **********************/
 document.getElementById("submit-btn").onclick = () => {
   if (confirm("Kirim jawaban sekarang?")) submitExam(false);
 };
