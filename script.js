@@ -9,6 +9,7 @@ const TIME_PER_QUESTION = 60;
  **********************/
 let questions = [];
 let answers = {};
+let currentIndex = 0;
 let timeLeft = 0;
 let timerInterval = null;
 let examRunning = false;
@@ -26,6 +27,10 @@ const numbersEl = document.getElementById("question-numbers");
 const timerEl = document.getElementById("timer");
 const resultText = document.getElementById("result-text");
 
+const studentName = document.getElementById("student-name");
+const studentNim = document.getElementById("student-nim");
+const studentClass = document.getElementById("student-class");
+
 /**********************
  * LOAD QUESTIONS
  **********************/
@@ -33,6 +38,7 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
+  // Random soal & opsi
   data = data.sort(() => Math.random() - 0.5);
   data.forEach(q => q.options.sort(() => Math.random() - 0.5));
 
@@ -40,38 +46,47 @@ async function loadQuestions() {
 }
 
 /**********************
- * RENDER QUESTIONS (SCROLL)
+ * RENDER SINGLE QUESTION
  **********************/
-function renderQuestions() {
+function renderQuestion() {
+  const q = questions[currentIndex];
   questionsEl.innerHTML = "";
 
-  questions.forEach((q, i) => {
-    const div = document.createElement("div");
-    div.className = "question";
-    div.dataset.index = i;
+  const div = document.createElement("div");
+  div.className = "question";
+  div.dataset.index = currentIndex;
 
-    div.innerHTML = `
-      <p><b>${i + 1}. ${q.text}</b></p>
-      <div class="options">
-        ${q.options.map(opt => `
-          <label class="option ${answers[i] === opt ? "selected" : ""}">
-            <input type="radio" name="q${i}" value="${opt}">
-            ${opt}
-          </label>
-        `).join("")}
-      </div>
-    `;
+  div.innerHTML = `
+    <p><b>${currentIndex + 1}. ${q.text}</b></p>
+    <div class="options">
+      ${q.options.map(opt => `
+        <label class="option ${answers[currentIndex] === opt ? "selected" : ""}">
+          <input type="radio" name="q${currentIndex}" value="${opt}">
+          <span>${opt}</span>
+        </label>
+      `).join("")}
+    </div>
+  `;
 
-    div.querySelectorAll("input").forEach(input => {
-      input.checked = answers[i] === input.value;
-      input.onchange = e => {
-        answers[i] = e.target.value;
-        updateNav();
-      };
-    });
+  div.querySelectorAll("input").forEach(input => {
+    input.checked = answers[currentIndex] === input.value;
 
-    questionsEl.appendChild(div);
+    input.onchange = e => {
+      answers[currentIndex] = e.target.value;
+
+      // update selected UI
+      div.querySelectorAll(".option")
+        .forEach(o => o.classList.remove("selected"));
+      input.closest(".option").classList.add("selected");
+
+      updateNav();
+    };
   });
+
+  questionsEl.appendChild(div);
+
+  updateNav();
+  updateSubmitVisibility();
 }
 
 /**********************
@@ -83,7 +98,12 @@ function renderNav() {
     const c = document.createElement("div");
     c.className = "circle";
     c.textContent = i + 1;
-    c.onclick = () => scrollToQuestion(i);
+
+    c.onclick = () => {
+      currentIndex = i;
+      renderQuestion();
+    };
+
     numbersEl.appendChild(c);
   });
 }
@@ -94,10 +114,28 @@ function updateNav() {
   });
 }
 
-function scrollToQuestion(i) {
-  const q = document.querySelector(`.question[data-index="${i}"]`);
-  q?.scrollIntoView({ behavior: "smooth", block: "center" });
+function updateSubmitVisibility() {
+  const submitBtn = document.getElementById("submit-btn");
+  submitBtn.style.display =
+    currentIndex === questions.length - 1 ? "inline-block" : "none";
 }
+
+/**********************
+ * BUTTON NAV
+ **********************/
+document.getElementById("next-btn").onclick = () => {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    renderQuestion();
+  }
+};
+
+document.getElementById("prev-btn").onclick = () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderQuestion();
+  }
+};
 
 /**********************
  * TIMER
@@ -120,20 +158,20 @@ function updateTimer() {
 }
 
 /**********************
- * SUBMIT & REVIEW
+ * SUBMIT & RESULT
  **********************/
 function submitExam(auto = false, reason = "") {
   if (submitted) return;
+
   submitted = true;
   examRunning = false;
-
   clearInterval(timerInterval);
   document.exitFullscreen?.();
 
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // MODE TERANG
+  // switch to light result
   document.body.style.background = "#f8fafc";
   document.body.style.color = "#111827";
 
@@ -166,11 +204,9 @@ function submitExam(auto = false, reason = "") {
   sendResult(correct, reason);
 }
 
-/**********************
- * SEND RESULT
- **********************/
 function sendResult(score, reason) {
   if (!GOOGLE_SCRIPT_URL) return;
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -218,8 +254,9 @@ document.getElementById("start-btn").onclick = async () => {
 
   await loadQuestions();
   renderNav();
-  renderQuestions();
-  updateNav();
+
+  currentIndex = 0;
+  renderQuestion();
 
   loginPage.style.display = "none";
   examPage.style.display = "block";
