@@ -1,6 +1,37 @@
-/* ===============================
-   NAV NUMBER – FINAL SINKRON
-   =============================== */
+/* ======================================
+   FIX RESULT PAGE – FORCE TERANG
+   ====================================== */
+
+/* override background global */
+#result-page.page.center{
+  background:#f8fafc !important;
+  color:#111827 !important;
+}
+
+/* card hasil */
+#result-page .result-card{
+  background:#ffffff !important;
+  color:#111827 !important;
+  border:1px solid #e5e7eb;
+  box-shadow:0 12px 30px rgba(0,0,0,.12);
+}
+
+/* review soal */
+#review-container .question{
+  background:#ffffff !important;
+  color:#111827 !important;
+  border:1px solid #e5e7eb;
+}
+
+/* text */
+#result-page h2,
+#result-page p{
+  color:#111827 !important;
+}
+
+/* ======================================
+   NAV NUMBER – FINAL SINKRON SCRIPT.JS
+   ====================================== */
 
 .nav-circle{
   display:grid;
@@ -8,7 +39,7 @@
   gap:10px;
 }
 
-/* tombol nomor soal */
+/* tombol nomor */
 .nav-number{
   width:44px;
   height:44px;
@@ -16,56 +47,27 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  background:var(--glass);
-  border:1px solid rgba(255,255,255,0.03);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
   cursor:pointer;
   font-weight:600;
-  color:var(--text);
+  color:#ffffff;
   transition:all .15s ease;
 }
 
-/* SOAL SUDAH DIJAWAB */
+/* soal SUDAH DIJAWAB */
 .nav-number.answered{
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  background:linear-gradient(90deg,#2196f3,#64b5f6);
   color:#012033;
 }
 
-/* SOAL AKTIF */
+/* soal AKTIF */
 .nav-number.active{
-  outline:3px solid rgba(100,181,246,0.3);
-  transform:scale(1.08);
+  outline:3px solid rgba(100,181,246,0.4);
+  transform:scale(1.1);
 }
 
 /* hover */
 .nav-number:hover{
-  background:rgba(255,255,255,0.08);
-}
-
-/* ===============================
-   RESULT PAGE – MODE TERANG
-   =============================== */
-
-#result-page{
-  background:#f8fafc;           /* PUTIH */
-  color:#111827;
-}
-
-.result-card{
-  background:#ffffff;
-  color:#111827;
-  border:1px solid #e5e7eb;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-/* Review jawaban */
-#review-container .question{
-  background:#ffffff;
-  border:1px solid #e5e7eb;
-  margin-bottom:12px;
-}
-
-/* teks hasil */
-#result-page h2,
-#result-page p{
-  color:#111827;
+  background:rgba(255,255,255,0.2);
 }
