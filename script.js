@@ -27,22 +27,14 @@ const numbersEl = document.getElementById("question-numbers");
 const timerEl = document.getElementById("timer");
 const resultText = document.getElementById("result-text");
 
-/* input peserta */
 const studentName = document.getElementById("student-name");
 const studentNim = document.getElementById("student-nim");
 const studentClass = document.getElementById("student-class");
 
-/* info peserta - sidebar */
 const infoName = document.getElementById("info-name");
 const infoNim = document.getElementById("info-nim");
 const infoClass = document.getElementById("info-class");
 
-/* info peserta - result */
-const resultName = document.getElementById("result-name");
-const resultNim = document.getElementById("result-nim");
-const resultClass = document.getElementById("result-class");
-
-/* tombol */
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const submitBtn = document.getElementById("submit-btn");
@@ -54,10 +46,8 @@ async function loadQuestions() {
   const res = await fetch("questions.json", { cache: "no-store" });
   let data = await res.json();
 
-  // random soal & opsi
   data = data.sort(() => Math.random() - 0.5);
   data.forEach(q => q.options.sort(() => Math.random() - 0.5));
-
   questions = data;
 }
 
@@ -70,50 +60,37 @@ function renderQuestion() {
 
   const div = document.createElement("div");
   div.className = "question";
-  div.dataset.index = currentIndex;
 
   div.innerHTML = `
     <p><b>${currentIndex + 1}. ${q.text}</b></p>
     <div class="options">
-      ${q.options
-        .map(
-          opt => `
-        <label class="option ${
-          answers[currentIndex] === opt ? "selected" : ""
-        }">
+      ${q.options.map(opt => `
+        <label class="option ${answers[currentIndex] === opt ? "selected" : ""}">
           <input type="radio" name="q${currentIndex}" value="${opt}">
           <span>${opt}</span>
         </label>
-      `
-        )
-        .join("")}
+      `).join("")}
     </div>
   `;
 
   div.querySelectorAll("input").forEach(input => {
     input.checked = answers[currentIndex] === input.value;
-
     input.onchange = e => {
       answers[currentIndex] = e.target.value;
-
-      div
-        .querySelectorAll(".option")
-        .forEach(o => o.classList.remove("selected"));
+      div.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
       input.closest(".option").classList.add("selected");
-
       updateNav();
     };
   });
 
   questionsEl.appendChild(div);
-
   updateNav();
   updateSubmitVisibility();
   updateNavButtons();
 }
 
 /**********************
- * NAVIGATION CIRCLE
+ * NAVIGATION
  **********************/
 function renderNav() {
   numbersEl.innerHTML = "";
@@ -121,12 +98,10 @@ function renderNav() {
     const c = document.createElement("div");
     c.className = "circle";
     c.textContent = i + 1;
-
     c.onclick = () => {
       currentIndex = i;
       renderQuestion();
     };
-
     numbersEl.appendChild(c);
   });
 }
@@ -137,9 +112,6 @@ function updateNav() {
   });
 }
 
-/**********************
- * NAV BUTTON STATE
- **********************/
 function updateNavButtons() {
   prevBtn.disabled = currentIndex === 0;
   nextBtn.disabled = currentIndex === questions.length - 1;
@@ -153,16 +125,16 @@ function updateSubmitVisibility() {
 /**********************
  * BUTTON EVENTS
  **********************/
-nextBtn.onclick = () => {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
+prevBtn.onclick = () => {
+  if (currentIndex > 0) {
+    currentIndex--;
     renderQuestion();
   }
 };
 
-prevBtn.onclick = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
+nextBtn.onclick = () => {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
     renderQuestion();
   }
 };
@@ -201,13 +173,8 @@ function submitExam(auto = false, reason = "") {
   examPage.style.display = "none";
   resultPage.style.display = "flex";
 
-  // aktifkan mode hasil (terang)
-  document.body.classList.add("result-mode");
-
-  // tampilkan info peserta di hasil
-  resultName.textContent = studentName.value;
-  resultNim.textContent = studentNim.value;
-  resultClass.textContent = studentClass.value;
+  document.body.style.background = "#f8fafc";
+  document.body.style.color = "#111827";
 
   let correct = 0;
   questions.forEach((q, i) => {
@@ -215,24 +182,35 @@ function submitExam(auto = false, reason = "") {
   });
 
   let html = `
-    <b>Skor:</b> ${correct} / ${questions.length}<br>
-    ${auto ? `<b>Ujian dihentikan otomatis</b><br>Alasan: ${reason}` : ""}
-    <hr><h3>Review Jawaban</h3>
+    <h2>Hasil Ujian</h2>
+    <p><b>Nama:</b> ${studentName.value}</p>
+    <p><b>NIM:</b> ${studentNim.value}</p>
+    <p><b>Kelas:</b> ${studentClass.value}</p>
+    <p><b>Skor:</b> ${correct} / ${questions.length}</p>
   `;
 
-  questions.forEach((q, i) => {
-    const benar = answers[i] === q.correct;
+  if (auto) {
     html += `
-      <div style="text-align:left;margin-bottom:12px">
-        <b>${i + 1}. ${q.text}</b><br>
-        Jawaban Anda: <b>${answers[i] || "-"}</b><br>
-        Jawaban Benar: <b>${q.correct}</b><br>
-        <span style="color:${benar ? "#16a34a" : "#dc2626"}">
-          ${benar ? "✔ Benar" : "✘ Salah"}
-        </span>
+      <div class="cheat-warning">
+        <h3>Ujian Dihentikan Otomatis</h3>
+        <p><b>Alasan:</b> ${reason}</p>
+        <p class="note">Review jawaban tidak ditampilkan.</p>
       </div>
     `;
-  });
+  } else {
+    html += `<hr><h3>Review Jawaban</h3>`;
+    questions.forEach((q, i) => {
+      const benar = answers[i] === q.correct;
+      html += `
+        <div class="review-item ${benar ? "benar" : "salah"}">
+          <b>${i + 1}. ${q.text}</b><br>
+          Jawaban Anda: <b>${answers[i] || "-"}</b><br>
+          Jawaban Benar: <b>${q.correct}</b><br>
+          <span>${benar ? "✔ Benar" : "✘ Salah"}</span>
+        </div>
+      `;
+    });
+  }
 
   resultText.innerHTML = html;
   sendResult(correct, reason);
@@ -240,7 +218,6 @@ function submitExam(auto = false, reason = "") {
 
 function sendResult(score, reason) {
   if (!GOOGLE_SCRIPT_URL) return;
-
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -277,6 +254,29 @@ window.addEventListener("beforeunload", () => {
   if (examRunning && !submitted) autoSubmit("Refresh halaman");
 });
 
+// Disable klik kanan
+document.addEventListener("contextmenu", e => {
+  e.preventDefault();
+  autoSubmit("Klik kanan terdeteksi");
+});
+
+// Disable inspect
+document.addEventListener("keydown", e => {
+  if (e.key === "F12") autoSubmit("Inspect Element (F12)");
+  if (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase()))
+    autoSubmit("Developer Tools");
+  if (e.ctrlKey && e.key.toUpperCase() === "U")
+    autoSubmit("View Source");
+});
+
+// Deteksi DevTools
+setInterval(() => {
+  if (!examRunning) return;
+  const w = window.outerWidth - window.innerWidth;
+  const h = window.outerHeight - window.innerHeight;
+  if (w > 160 || h > 160) autoSubmit("Developer Tools terdeteksi");
+}, 1000);
+
 /**********************
  * START EXAM
  **********************/
@@ -286,10 +286,6 @@ document.getElementById("start-btn").onclick = async () => {
     return;
   }
 
-  // pastikan mode gelap aktif
-  document.body.classList.remove("result-mode");
-
-  // isi info peserta di sidebar
   infoName.textContent = studentName.value;
   infoNim.textContent = studentNim.value;
   infoClass.textContent = studentClass.value;
