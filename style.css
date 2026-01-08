@@ -1,209 +1,66 @@
-:root{
-  --bg:#0b0f12;
-  --card:#1e262b;
-  --muted:#9aa3aa;
-  --text:#f4f7f9;
-  --accent:#2196f3;
-  --accent-2:#64b5f6;
-  --glass: rgba(255,255,255,0.03);
-  --max-width:980px;
-  --radius:12px;
-}
-
-/* RESET */
-*{box-sizing:border-box}
-html,body{
-  height:100%;
-  margin:0;
-  padding:0;
-  background:var(--bg);
-  font-family:'Poppins',system-ui;
-  color:var(--text);
-}
-
-/* PAGE */
-.page.center{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
-  padding:18px;
-}
-
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
-  border-radius:var(--radius);
-  padding:20px;
-  box-shadow:0 10px 30px rgba(2,6,23,0.6);
-}
-
-.hidden{display:none}
-
-/* HEADER */
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px 20px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.timer{color:var(--accent);font-weight:700}
-
-/* LAYOUT */
-.main{
-  display:flex;
-  gap:18px;
-  padding:18px;
-  max-width:var(--max-width);
-  margin:auto;
-}
-
-.content{flex:1}
-.sidebar{width:220px}
-
 /* ===============================
-   SOAL UJIAN (DARK MODE)
+   FORCE DARK MODE SAAT UJIAN
    =============================== */
 
-.questions{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+#exam-page {
+  background: var(--bg);
+  color: var(--text);
 }
 
-#exam-page .question{
-  background:var(--card);
-  padding:14px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.04);
-  display:block;
+/* soal */
+#exam-page .question {
+  background: var(--card);
+  color: var(--text);
 }
 
-#exam-page .question p{
-  margin:0 0 12px;
-  font-size:16px;
+/* teks soal */
+#exam-page .question p {
+  color: var(--text);
 }
 
-.options{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+/* opsi jawaban */
+#exam-page .option {
+  color: var(--text);
+  background: transparent;
 }
 
-.option{
-  display:flex;
-  gap:12px;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.04);
-  cursor:pointer;
-  transition:.15s;
+/* radio */
+#exam-page .option input {
+  accent-color: var(--accent);
 }
 
-.option:hover{
-  background:rgba(255,255,255,0.05);
-}
-
-.option.selected{
-  background:linear-gradient(90deg, rgba(33,150,243,0.15), rgba(100,181,246,0.05));
-  border-color:var(--accent);
+/* opsi dipilih */
+#exam-page .option.selected {
+  background: linear-gradient(
+    90deg,
+    rgba(33,150,243,0.15),
+    rgba(100,181,246,0.08)
+  );
+  border-color: rgba(100,181,246,0.3);
 }
 
 /* ===============================
-   NAVIGASI NOMOR SOAL
+   MODE TERANG KHUSUS REVIEW
    =============================== */
 
-.nav-circle{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
+#result-page {
+  background: #f8fafc;
+  color: #111827;
 }
 
-.nav-circle .circle{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--glass);
-  border:1px solid rgba(255,255,255,0.05);
-  color:var(--text);
-  font-weight:600;
-  cursor:pointer;
+#result-page .result-card {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
 }
 
-.nav-circle .circle.answered{
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
-  color:#012033;
+/* review soal */
+#result-page .question {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
 }
 
-.nav-circle .circle.current{
-  outline:3px solid rgba(100,181,246,0.35);
-  transform:scale(1.08);
-}
-
-/* ===============================
-   RESULT PAGE (WHITE MODE)
-   =============================== */
-
-#result-page{
-  background:#f8fafc;
-  color:#111827;
-}
-
-#result-page .card{
-  background:#ffffff;
-  color:#111827;
-  border:1px solid #e5e7eb;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
-}
-
-/* REVIEW JAWABAN */
-#result-page #review-container .question{
-  background:#ffffff;
-  color:#111827;
-  border:1px solid #e5e7eb;
-  padding:16px;
-  margin-bottom:16px;
-  border-radius:12px;
-}
-
-#result-page .option{
-  border-color:#e5e7eb;
-  color:#111827;
-}
-
-#result-page .option.selected{
-  background:#dbeafe;
-  border-color:#3b82f6;
-}
-
-/* ===============================
-   BUTTON
-   =============================== */
-
-.bottom-nav{
-  display:flex;
-  gap:12px;
-  margin:24px auto;
-}
-
-.nav-btn,
-.submit-btn{
-  padding:12px 20px;
-  border-radius:10px;
-  border:none;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.nav-btn{background:#0f1720;color:#fff}
-.submit-btn{background:var(--accent);color:#fff}
-
-/* MOBILE */
-@media(max-width:900px){
-  .main{flex-direction:column}
-  .sidebar{width:100%}
+#result-page .question p {
+  color: #111827;
 }
