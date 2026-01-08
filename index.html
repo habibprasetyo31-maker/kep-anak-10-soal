@@ -1,12 +1,14 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Ujian Online - Dark Elegant</title>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <title>Ujian Online - CBT</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body autocomplete="off">
@@ -14,21 +16,19 @@
 <!-- ================= LOGIN PAGE ================= -->
 <div id="login-page" class="page center">
   <div class="card login-card">
-    <h1>Ujian Online - Kelas D</h1>
+    <h1>Ujian Online<br>Kelas D</h1>
 
-    <input id="student-name" type="text" placeholder="Nama Lengkap" autocomplete="off" />
-    <input id="student-nim" type="text" placeholder="NIM" autocomplete="off" />
-    <input id="student-class" type="text" placeholder="Kelas" autocomplete="off" />
+    <input id="student-name" type="text" placeholder="Nama Lengkap" required>
+    <input id="student-nim" type="text" placeholder="NIM" required>
+    <input id="student-class" type="text" placeholder="Kelas" required>
 
-    <div class="row">
-      <button id="start-btn" class="primary" type="button">
-        Mulai Ujian
-      </button>
-    </div>
+    <button id="start-btn" class="primary" type="button">
+      Mulai Ujian
+    </button>
 
     <p class="note">
-      Mode portrait direkomendasikan.<br>
-      Fullscreen & sistem keamanan aktif.
+      • Mode portrait direkomendasikan<br>
+      • Fullscreen & sistem keamanan aktif
     </p>
   </div>
 </div>
@@ -36,19 +36,22 @@
 <!-- ================= EXAM PAGE ================= -->
 <div id="exam-page" class="page" style="display:none;">
 
+  <!-- TOP BAR -->
   <header class="topbar">
-    <div class="brand">📝 Ujian - Kelas D</div>
+    <div class="brand">📝 Ujian CBT</div>
     <div id="timer" class="timer">Waktu: 00:00</div>
   </header>
 
+  <!-- MAIN -->
   <main class="main">
 
-    <!-- ===== SOAL ===== -->
+    <!-- SOAL -->
     <section class="content">
+      <!-- 🔥 HANYA 1 SOAL DIRENDER DI SINI -->
       <div id="questions" class="questions"></div>
     </section>
 
-    <!-- ===== SIDEBAR ===== -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
 
       <div class="panel sticky-nav">
@@ -57,7 +60,7 @@
       </div>
 
       <div class="panel">
-        <h4>Informasi Peserta</h4>
+        <h4>Peserta</h4>
         <p id="info-student">
           <span id="info-name">-</span><br>
           <span id="info-nim">-</span><br>
@@ -68,14 +71,16 @@
     </aside>
   </main>
 
-  <!-- ===== NAVIGATION ===== -->
+  <!-- NAVIGATION -->
   <div class="bottom-nav">
     <button id="prev-btn" class="nav-btn" type="button">
       ‹ Sebelumnya
     </button>
+
     <button id="next-btn" class="nav-btn" type="button">
       Selanjutnya ›
     </button>
+
     <button id="submit-btn" class="submit-btn" type="button">
       Kirim Jawaban
     </button>
@@ -90,9 +95,6 @@
 
     <p id="result-text"></p>
 
-    <!-- REVIEW JAWABAN -->
-    <div id="review-container"></div>
-
     <p class="note">
       Halaman ini terkunci.<br>
       Terima kasih telah mengikuti ujian.
@@ -100,7 +102,7 @@
   </div>
 </div>
 
-<!-- ================= SCRIPT ================= -->
+<!-- ================= CONFIG ================= -->
 <script>
   window.GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbyxqwYcNIqVAjV_KSRO6QiIXMJ2dYdvLehVPAOmAaWKg5l8KhZinhGdrrv1sZEs5ZbZ/exec";
