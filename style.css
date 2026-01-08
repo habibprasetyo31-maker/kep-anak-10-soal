@@ -1,271 +1,243 @@
-/**********************
- * CONFIG
- **********************/
-const GOOGLE_SCRIPT_URL = window.GOOGLE_SCRIPT_URL || "";
-const TIME_PER_QUESTION = 60;
-
-/**********************
- * STATE
- **********************/
-let questions = [];
-let answers = {};
-let currentIndex = 0;
-let timeLeft = 0;
-let timerInterval = null;
-let examRunning = false;
-let submitted = false;
-
-/**********************
- * ELEMENTS
- **********************/
-const loginPage = document.getElementById("login-page");
-const examPage = document.getElementById("exam-page");
-const resultPage = document.getElementById("result-page");
-
-const questionsEl = document.getElementById("questions");
-const numbersEl = document.getElementById("question-numbers");
-const timerEl = document.getElementById("timer");
-const resultText = document.getElementById("result-text");
-
-const studentName = document.getElementById("student-name");
-const studentNim = document.getElementById("student-nim");
-const studentClass = document.getElementById("student-class");
-
-/**********************
- * LOAD QUESTIONS
- **********************/
-async function loadQuestions() {
-  const res = await fetch("questions.json", { cache: "no-store" });
-  let data = await res.json();
-
-  // Random soal & opsi
-  data = data.sort(() => Math.random() - 0.5);
-  data.forEach(q => q.options.sort(() => Math.random() - 0.5));
-
-  questions = data;
+:root{
+  --bg:#0b0f12;
+  --card:#1e262b;
+  --muted:#9aa3aa;
+  --text:#f4f7f9;
+  --accent:#2196f3;
+  --accent-2:#64b5f6;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius:12px;
+  --max-width:980px;
 }
 
-/**********************
- * RENDER SINGLE QUESTION
- **********************/
-function renderQuestion() {
-  const q = questions[currentIndex];
-  questionsEl.innerHTML = "";
-
-  const div = document.createElement("div");
-  div.className = "question";
-  div.dataset.index = currentIndex;
-
-  div.innerHTML = `
-    <p><b>${currentIndex + 1}. ${q.text}</b></p>
-    <div class="options">
-      ${q.options.map(opt => `
-        <label class="option ${answers[currentIndex] === opt ? "selected" : ""}">
-          <input type="radio" name="q${currentIndex}" value="${opt}">
-          <span>${opt}</span>
-        </label>
-      `).join("")}
-    </div>
-  `;
-
-  div.querySelectorAll("input").forEach(input => {
-    input.checked = answers[currentIndex] === input.value;
-
-    input.onchange = e => {
-      answers[currentIndex] = e.target.value;
-
-      // update selected UI
-      div.querySelectorAll(".option")
-        .forEach(o => o.classList.remove("selected"));
-      input.closest(".option").classList.add("selected");
-
-      updateNav();
-    };
-  });
-
-  questionsEl.appendChild(div);
-
-  updateNav();
-  updateSubmitVisibility();
+*{
+  box-sizing:border-box;
 }
 
-/**********************
- * NAVIGATION
- **********************/
-function renderNav() {
-  numbersEl.innerHTML = "";
-  questions.forEach((_, i) => {
-    const c = document.createElement("div");
-    c.className = "circle";
-    c.textContent = i + 1;
-
-    c.onclick = () => {
-      currentIndex = i;
-      renderQuestion();
-    };
-
-    numbersEl.appendChild(c);
-  });
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;
 }
 
-function updateNav() {
-  document.querySelectorAll(".circle").forEach((c, i) => {
-    c.classList.toggle("answered", answers[i] !== undefined);
-  });
+/* =====================
+   PAGE
+===================== */
+.page{
+  min-height:100vh;
 }
 
-function updateSubmitVisibility() {
-  const submitBtn = document.getElementById("submit-btn");
-  submitBtn.style.display =
-    currentIndex === questions.length - 1 ? "inline-block" : "none";
+.page.center{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
 }
 
-/**********************
- * BUTTON NAV
- **********************/
-document.getElementById("next-btn").onclick = () => {
-  if (currentIndex < questions.length - 1) {
-    currentIndex++;
-    renderQuestion();
+/* =====================
+   CARD
+===================== */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:20px;
+  width:100%;
+  max-width:720px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  border:1px solid var(--border);
+}
+
+/* =====================
+   LOGIN
+===================== */
+.login-card h1{
+  margin:0 0 12px;
+}
+
+.login-card input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  background:#0f1720;
+  border:1px solid var(--border);
+  color:var(--text);
+  font-size:15px;
+}
+
+.primary{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.note{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* =====================
+   TOPBAR
+===================== */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  border-bottom:1px solid var(--border);
+}
+
+.timer{
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* =====================
+   MAIN LAYOUT
+===================== */
+.main{
+  display:flex;
+  gap:18px;
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:18px;
+}
+
+.content{
+  flex:1;
+}
+
+.sidebar{
+  width:220px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* =====================
+   QUESTIONS
+===================== */
+.questions{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.question{
+  background:#121820;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+}
+
+.question p{
+  margin:0 0 12px;
+  font-size:16px;
+  line-height:1.5;
+  color:var(--text);
+}
+
+/* =====================
+   OPTIONS
+===================== */
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.option{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  background:#0f1720;
+  transition:.15s;
+  color:var(--text);
+}
+
+.option input{
+  accent-color:var(--accent);
+  transform:scale(1.1);
+}
+
+.option:hover{
+  background:#16202b;
+}
+
+.option.selected{
+  background:linear-gradient(
+    90deg,
+    rgba(33,150,243,.18),
+    rgba(100,181,246,.08)
+  );
+  border-color:rgba(100,181,246,.4);
+}
+
+/* =====================
+   NAV NUMBER
+===================== */
+.nav-circle{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.nav-circle .circle{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0f1720;
+  border:1px solid var(--border);
+  color:var(--text);
+  font-weight:600;
+  cursor:pointer;
+}
+
+.nav-circle .circle.answered{
+  background:linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent-2)
+  );
+  color:#03131f;
+}
+
+/* =====================
+   RESULT (LIGHT MODE)
+===================== */
+#result-page{
+  background:#f8fafc;
+  color:#111827;
+}
+
+#result-page .card{
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media(max-width:900px){
+  .main{
+    flex-direction:column;
   }
-};
-
-document.getElementById("prev-btn").onclick = () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderQuestion();
+  .sidebar{
+    width:100%;
   }
-};
-
-/**********************
- * TIMER
- **********************/
-function startTimer() {
-  timeLeft = questions.length * TIME_PER_QUESTION;
-  updateTimer();
-
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimer();
-    if (timeLeft <= 0) autoSubmit("Waktu habis");
-  }, 1000);
 }
-
-function updateTimer() {
-  const m = Math.floor(timeLeft / 60);
-  const s = timeLeft % 60;
-  timerEl.textContent = `Waktu: ${m}:${s < 10 ? "0" + s : s}`;
-}
-
-/**********************
- * SUBMIT & RESULT
- **********************/
-function submitExam(auto = false, reason = "") {
-  if (submitted) return;
-
-  submitted = true;
-  examRunning = false;
-  clearInterval(timerInterval);
-  document.exitFullscreen?.();
-
-  examPage.style.display = "none";
-  resultPage.style.display = "flex";
-
-  // switch to light result
-  document.body.style.background = "#f8fafc";
-  document.body.style.color = "#111827";
-
-  let correct = 0;
-  questions.forEach((q, i) => {
-    if (answers[i] === q.correct) correct++;
-  });
-
-  let html = `
-    <b>Skor:</b> ${correct} / ${questions.length}<br>
-    ${auto ? `<b>Ujian dihentikan otomatis</b><br>Alasan: ${reason}` : ""}
-    <hr><h3>Review Jawaban</h3>
-  `;
-
-  questions.forEach((q, i) => {
-    const benar = answers[i] === q.correct;
-    html += `
-      <div style="text-align:left;margin-bottom:12px">
-        <b>${i + 1}. ${q.text}</b><br>
-        Jawaban Anda: <b>${answers[i] || "-"}</b><br>
-        Jawaban Benar: <b>${q.correct}</b><br>
-        <span style="color:${benar ? "#16a34a" : "#dc2626"}">
-          ${benar ? "✔ Benar" : "✘ Salah"}
-        </span>
-      </div>
-    `;
-  });
-
-  resultText.innerHTML = html;
-  sendResult(correct, reason);
-}
-
-function sendResult(score, reason) {
-  if (!GOOGLE_SCRIPT_URL) return;
-
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify({
-      name: studentName.value,
-      nim: studentNim.value,
-      class: studentClass.value,
-      score,
-      reason,
-      timestamp: new Date().toISOString()
-    })
-  });
-}
-
-/**********************
- * ANTI CHEAT
- **********************/
-function autoSubmit(reason) {
-  if (!examRunning) return;
-  submitExam(true, reason);
-}
-
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) autoSubmit("Berpindah tab");
-});
-
-document.addEventListener("fullscreenchange", () => {
-  if (examRunning && !document.fullscreenElement) {
-    autoSubmit("Keluar fullscreen");
-  }
-});
-
-window.addEventListener("beforeunload", () => {
-  if (examRunning && !submitted) autoSubmit("Refresh halaman");
-});
-
-/**********************
- * START
- **********************/
-document.getElementById("start-btn").onclick = async () => {
-  if (!studentName.value || !studentNim.value || !studentClass.value) {
-    alert("Lengkapi data peserta");
-    return;
-  }
-
-  await loadQuestions();
-  renderNav();
-
-  currentIndex = 0;
-  renderQuestion();
-
-  loginPage.style.display = "none";
-  examPage.style.display = "block";
-
-  examRunning = true;
-  startTimer();
-  document.documentElement.requestFullscreen?.();
-};
-
-document.getElementById("submit-btn").onclick = () => {
-  if (confirm("Kirim jawaban sekarang?")) submitExam(false);
-};
