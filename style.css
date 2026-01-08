@@ -1,37 +1,118 @@
-/* ======================================
-   FIX RESULT PAGE – FORCE TERANG
-   ====================================== */
-
-/* override background global */
-#result-page.page.center{
-  background:#f8fafc !important;
-  color:#111827 !important;
+:root{
+  --bg:#0b0f12;
+  --card:#1e262b;
+  --muted:#9aa3aa;
+  --text:#f4f7f9;
+  --accent:#2196f3;
+  --accent-2:#64b5f6;
+  --glass: rgba(255,255,255,0.03);
+  --max-width:980px;
+  --radius:12px;
 }
 
-/* card hasil */
-#result-page .result-card{
-  background:#ffffff !important;
-  color:#111827 !important;
-  border:1px solid #e5e7eb;
-  box-shadow:0 12px 30px rgba(0,0,0,.12);
+/* RESET */
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  font-family:'Poppins',system-ui;
+  color:var(--text);
 }
 
-/* review soal */
-#review-container .question{
-  background:#ffffff !important;
-  color:#111827 !important;
-  border:1px solid #e5e7eb;
+/* PAGE */
+.page.center{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:18px;
 }
 
-/* text */
-#result-page h2,
-#result-page p{
-  color:#111827 !important;
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:0 10px 30px rgba(2,6,23,0.6);
 }
 
-/* ======================================
-   NAV NUMBER – FINAL SINKRON SCRIPT.JS
-   ====================================== */
+.hidden{display:none}
+
+/* HEADER */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.timer{color:var(--accent);font-weight:700}
+
+/* LAYOUT */
+.main{
+  display:flex;
+  gap:18px;
+  padding:18px;
+  max-width:var(--max-width);
+  margin:auto;
+}
+
+.content{flex:1}
+.sidebar{width:220px}
+
+/* ===============================
+   SOAL UJIAN (DARK MODE)
+   =============================== */
+
+.questions{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+#exam-page .question{
+  background:var(--card);
+  padding:14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.04);
+  display:block;
+}
+
+#exam-page .question p{
+  margin:0 0 12px;
+  font-size:16px;
+}
+
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.option{
+  display:flex;
+  gap:12px;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  cursor:pointer;
+  transition:.15s;
+}
+
+.option:hover{
+  background:rgba(255,255,255,0.05);
+}
+
+.option.selected{
+  background:linear-gradient(90deg, rgba(33,150,243,0.15), rgba(100,181,246,0.05));
+  border-color:var(--accent);
+}
+
+/* ===============================
+   NAVIGASI NOMOR SOAL
+   =============================== */
 
 .nav-circle{
   display:grid;
@@ -39,35 +120,90 @@
   gap:10px;
 }
 
-/* tombol nomor */
-.nav-number{
+.nav-circle .circle{
   width:44px;
   height:44px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.15);
-  cursor:pointer;
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,0.05);
+  color:var(--text);
   font-weight:600;
-  color:#ffffff;
-  transition:all .15s ease;
+  cursor:pointer;
 }
 
-/* soal SUDAH DIJAWAB */
-.nav-number.answered{
-  background:linear-gradient(90deg,#2196f3,#64b5f6);
+.nav-circle .circle.answered{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
   color:#012033;
 }
 
-/* soal AKTIF */
-.nav-number.active{
-  outline:3px solid rgba(100,181,246,0.4);
-  transform:scale(1.1);
+.nav-circle .circle.current{
+  outline:3px solid rgba(100,181,246,0.35);
+  transform:scale(1.08);
 }
 
-/* hover */
-.nav-number:hover{
-  background:rgba(255,255,255,0.2);
+/* ===============================
+   RESULT PAGE (WHITE MODE)
+   =============================== */
+
+#result-page{
+  background:#f8fafc;
+  color:#111827;
+}
+
+#result-page .card{
+  background:#ffffff;
+  color:#111827;
+  border:1px solid #e5e7eb;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* REVIEW JAWABAN */
+#result-page #review-container .question{
+  background:#ffffff;
+  color:#111827;
+  border:1px solid #e5e7eb;
+  padding:16px;
+  margin-bottom:16px;
+  border-radius:12px;
+}
+
+#result-page .option{
+  border-color:#e5e7eb;
+  color:#111827;
+}
+
+#result-page .option.selected{
+  background:#dbeafe;
+  border-color:#3b82f6;
+}
+
+/* ===============================
+   BUTTON
+   =============================== */
+
+.bottom-nav{
+  display:flex;
+  gap:12px;
+  margin:24px auto;
+}
+
+.nav-btn,
+.submit-btn{
+  padding:12px 20px;
+  border-radius:10px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.nav-btn{background:#0f1720;color:#fff}
+.submit-btn{background:var(--accent);color:#fff}
+
+/* MOBILE */
+@media(max-width:900px){
+  .main{flex-direction:column}
+  .sidebar{width:100%}
 }
