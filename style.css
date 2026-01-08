@@ -40,3 +40,14 @@
 .nav-circle .circle:hover{
   background:rgba(255,255,255,0.08);
 }
+/* FORCE DARK RESULT UI */
+#result-page {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: var(--text);
+}
+
+.result-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
