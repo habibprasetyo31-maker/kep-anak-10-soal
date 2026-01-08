@@ -64,3 +64,59 @@
 #result-page .question p {
   color: #111827;
 }
+/* ===============================
+   DEFAULT MODE – DARK (LOGIN & EXAM)
+   =============================== */
+
+body {
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: var(--text);
+}
+
+/* ===============================
+   RESULT MODE – LIGHT (REVIEW)
+   =============================== */
+
+body.result-mode {
+  background: #f8fafc;
+  color: #111827;
+}
+
+/* CARD HASIL */
+body.result-mode .result-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+}
+
+/* REVIEW SOAL */
+body.result-mode .question {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   NAV NUMBER – FIX INDIKATOR
+   =============================== */
+
+.nav-circle .circle {
+  background: var(--glass);
+  color: var(--text);
+}
+
+/* answered */
+.nav-circle .circle.answered {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #012033;
+}
+
+/* current */
+.nav-circle .circle.current {
+  outline: 3px solid rgba(100,181,246,0.35);
+  transform: scale(1.08);
+}
+
+/* hover */
+.nav-circle .circle:hover {
+  background: rgba(255,255,255,0.1);
+}
