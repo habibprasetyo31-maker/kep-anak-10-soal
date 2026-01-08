@@ -5,170 +5,195 @@
   --text:#f4f7f9;
   --accent:#2196f3;
   --accent-2:#64b5f6;
-  --glass: rgba(255,255,255,0.03);
-  --max-width:980px;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
   --radius:12px;
+  --max-width:980px;
 }
 
-/* ================= RESET ================= */
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
 html,body{
-  height:100%;
   margin:0;
   padding:0;
-  font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;
-  -webkit-font-smoothing:antialiased;
-}
-
-/* ================= MODE DEFAULT (UJIAN) ================= */
-body{
+  height:100%;
   background:var(--bg);
   color:var(--text);
+  font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;
 }
 
-/* ================= PAGE ================= */
+/* =====================
+   PAGE
+===================== */
+.page{
+  min-height:100vh;
+}
+
 .page.center{
   display:flex;
   align-items:center;
   justify-content:center;
-  min-height:100vh;
   padding:18px;
 }
 
-/* ================= CARD ================= */
+/* =====================
+   CARD
+===================== */
 .card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+  background:var(--card);
   border-radius:var(--radius);
   padding:20px;
-  box-shadow:0 10px 30px rgba(2,6,23,0.6);
   width:100%;
   max-width:720px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  border:1px solid var(--border);
 }
 
-/* ================= LOGIN ================= */
+/* =====================
+   LOGIN
+===================== */
 .login-card h1{
   margin:0 0 12px;
-  font-size:20px
 }
+
 .login-card input{
   width:100%;
   padding:12px;
   margin:10px 0;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.04);
   background:#0f1720;
+  border:1px solid var(--border);
   color:var(--text);
   font-size:15px;
 }
-.login-card .row{
-  display:flex;
-  justify-content:flex-end
-}
+
 .primary{
   background:var(--accent);
-  border:none;
   color:#fff;
-  padding:10px 16px;
+  border:none;
+  padding:12px 18px;
   border-radius:10px;
+  font-weight:700;
   cursor:pointer;
-  font-weight:600
-}
-.note{
-  font-size:13px;
-  color:var(--muted);
-  margin-top:10px
 }
 
-/* ================= HEADER ================= */
+.note{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* =====================
+   TOPBAR
+===================== */
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:12px 20px;
-  position:sticky;
-  top:0;
-  z-index:40;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-  background:var(--bg);
+  padding:14px 20px;
+  border-bottom:1px solid var(--border);
 }
-.brand{font-weight:700}
-.timer{font-weight:700;color:var(--accent)}
 
-/* ================= LAYOUT ================= */
+.timer{
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* =====================
+   MAIN LAYOUT
+===================== */
 .main{
   display:flex;
   gap:18px;
-  padding:18px;
   max-width:var(--max-width);
-  margin:8px auto;
-  width:100%;
+  margin:0 auto;
+  padding:18px;
 }
-.content{flex:1}
+
+.content{
+  flex:1;
+}
+
 .sidebar{
   width:220px;
   display:flex;
   flex-direction:column;
-  gap:12px
+  gap:12px;
 }
-.panel{
-  background:var(--card);
-  padding:12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.03)
-}
-.sticky-nav{position:sticky;top:80px}
 
-/* ================= QUESTIONS ================= */
+/* =====================
+   QUESTIONS
+===================== */
 .questions{
   display:flex;
   flex-direction:column;
-  gap:14px
+  gap:16px;
 }
+
 .question{
-  background:var(--card);
-  padding:16px;
+  background:#121820;
+  border:1px solid var(--border);
   border-radius:12px;
-  border:1px solid rgba(255,255,255,0.04)
+  padding:16px;
 }
+
 .question p{
   margin:0 0 12px;
   font-size:16px;
   line-height:1.5;
-  color:var(--text)
+  color:var(--text);
 }
 
-/* ================= OPTIONS ================= */
+/* =====================
+   OPTIONS
+===================== */
 .options{
   display:flex;
   flex-direction:column;
-  gap:10px
+  gap:10px;
 }
+
 .option{
   display:flex;
   align-items:center;
   gap:12px;
   padding:12px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.04);
+  border:1px solid var(--border);
   cursor:pointer;
   background:#0f1720;
-  transition:all .15s ease
-}
-.option input{width:18px;height:18px}
-.option:hover{
-  background:rgba(255,255,255,0.04);
-}
-.option.selected{
-  background:linear-gradient(90deg, rgba(33,150,243,0.12), rgba(100,181,246,0.06));
-  border-color:rgba(100,181,246,0.3)
+  transition:.15s;
+  color:var(--text);
 }
 
-/* ================= NAV NUMBER ================= */
+.option input{
+  accent-color:var(--accent);
+  transform:scale(1.1);
+}
+
+.option:hover{
+  background:#16202b;
+}
+
+.option.selected{
+  background:linear-gradient(
+    90deg,
+    rgba(33,150,243,.18),
+    rgba(100,181,246,.08)
+  );
+  border-color:rgba(100,181,246,.4);
+}
+
+/* =====================
+   NAV NUMBER
+===================== */
 .nav-circle{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:10px
+  gap:10px;
 }
+
 .nav-circle .circle{
   width:44px;
   height:44px;
@@ -177,79 +202,42 @@ body{
   align-items:center;
   justify-content:center;
   background:#0f1720;
-  border:1px solid rgba(255,255,255,0.05);
-  cursor:pointer;
-  font-weight:600;
+  border:1px solid var(--border);
   color:var(--text);
-  transition:all .15s ease
-}
-.nav-circle .circle.answered{
-  background:linear-gradient(90deg,var(--accent),var(--accent-2));
-  color:#012033
-}
-.nav-circle .circle.current{
-  outline:3px solid rgba(100,181,246,0.3);
-  transform:scale(1.08)
+  font-weight:600;
+  cursor:pointer;
 }
 
-/* ================= RESULT MODE (TERANG) ================= */
+.nav-circle .circle.answered{
+  background:linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent-2)
+  );
+  color:#03131f;
+}
+
+/* =====================
+   RESULT (LIGHT MODE)
+===================== */
 #result-page{
   background:#f8fafc;
-  color:#111827
+  color:#111827;
 }
+
 #result-page .card{
   background:#ffffff;
-  color:#111827;
   border:1px solid #e5e7eb;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08)
-}
-#result-page .question{
-  background:#ffffff;
-  border:1px solid #e5e7eb
 }
 
-/* ================= MOBILE ================= */
+/* =====================
+   RESPONSIVE
+===================== */
 @media(max-width:900px){
-  .main{flex-direction:column;padding:12px}
-  .sidebar{width:100%}
-  .nav-circle{
-    display:flex;
-    overflow:auto;
-    gap:8px;
-    padding:6px
+  .main{
+    flex-direction:column;
   }
-  .nav-circle .circle{
-    min-width:44px;
-    flex:0 0 auto
-  }
-  .bottom-nav{
-    display:flex;
-    position:fixed;
-    bottom:12px;
-    left:12px;
-    right:12px;
-    gap:8px;
-    z-index:999
-  }
-  .nav-btn{
-    flex:1;
-    background:#0f1720;
-    border:none;
-    padding:12px;
-    border-radius:10px;
-    color:var(--text);
-    font-weight:600
-  }
-  .submit-btn{
-    flex:1;
-    background:var(--accent);
-    border:none;
-    padding:12px;
-    border-radius:10px;
-    color:#fff;
-    font-weight:700
+  .sidebar{
+    width:100%;
   }
 }
-
-/* ================= UTIL ================= */
-.hidden{display:none}
